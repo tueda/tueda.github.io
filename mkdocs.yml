@@ -1,0 +1,24 @@
+site_name: 'Takahiro Ueda''s page'
+site_author: 'Takahiro Ueda'
+
+pages:
+  - Home: index.md
+  - CV: cv.md
+  - Publications: publications.md
+  - Talks: talks.md
+
+theme: material
+
+markdown_extensions:
+  - markdown.extensions.attr_list
+  - markdown.extensions.def_list
+  - pymdownx.arithmatex
+
+extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css
+  - css/extra.css
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js
+  - js/katex-start.js
