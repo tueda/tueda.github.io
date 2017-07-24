@@ -13,6 +13,7 @@ markdown_extensions:
   - markdown.extensions.attr_list
   - markdown.extensions.def_list
   - pymdownx.arithmatex
+  - bibtex
 
 extra_css:
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css

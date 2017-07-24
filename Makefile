@@ -1,11 +1,11 @@
 # Prerequisites:
-#   pip install mkdocs mkdocs-material
+#   pip install mkdocs mkdocs-material bibtexparser
 
 build:
-	mkdocs build
+	PYTHONPATH=$$(pwd)/ext mkdocs build
 
 serve:
-	mkdocs serve
+	PYTHONPATH=$$(pwd)/ext mkdocs serve
 
 clean:
-	rm -rf site
+	rm -rf site */*.pyc
