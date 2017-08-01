@@ -49,9 +49,25 @@ class BibTeXPreprocessor(Preprocessor):
             return None
         entry = entries[0]
 
+        # Canonicalize spaces in "title" and "author".
         for key in ('title', 'author'):
             if key in entry:
                 entry[key] = re.sub(r'\s+', ' ', entry[key].strip())
+
+        # Accent and special characters in LaTeX.
+        simple_replacements = {
+            '\\"A': u"\u00C4",
+            '\\"a': u"\u00E4",
+            '\\"O': u"\u00D6",
+            '\\"o': u"\u00F6",
+            '\\"U': u"\u00DC",
+            '\\"u': u"\u00FC",
+        }
+        for key in entry:
+            s = entry[key]
+            for r in simple_replacements:
+                s = s.replace(r, simple_replacements[r])
+            entry[key] = s
 
         format_name = '_format_' + self._style + '_' + entry['ENTRYTYPE']
 

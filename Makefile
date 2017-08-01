@@ -1,5 +1,5 @@
 # Prerequisites:
-#   pip install mkdocs mkdocs-material bibtexparser
+#   pip install markdown-include mkdocs mkdocs-material bibtexparser
 
 build:
 	PYTHONPATH=$$(pwd)/ext mkdocs build

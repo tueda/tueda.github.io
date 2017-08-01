@@ -12,6 +12,8 @@ theme: material
 markdown_extensions:
   - markdown.extensions.attr_list
   - markdown.extensions.def_list
+  - markdown_include.include:
+      base_path: docs
   - pymdownx.arithmatex
   - bibtex
 
