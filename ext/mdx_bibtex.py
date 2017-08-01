@@ -66,6 +66,9 @@ class BibTeXPreprocessor(Preprocessor):
         for key in entry:
             s = entry[key]
             for r in simple_replacements:
+                # One often writes {\"o} in BibTeX: the curly braces should be
+                # removed.
+                s = s.replace('{{{0}}}'.format(r), simple_replacements[r])
                 s = s.replace(r, simple_replacements[r])
             entry[key] = s
 
@@ -93,6 +96,7 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add_sep()
         lines.add(_cv_preprint(entry))
         lines.add(_cv_inspire(entry))
+        lines.add(_cv_github(entry))
 
         return lines
 
@@ -104,20 +108,21 @@ def _cv_author(entry):
     authors = _get_authors(entry)
     aa = []
     for i, a in enumerate(authors):
+        # Handle spaces in an author name.
+        a = re.sub(r'\.', '. ', a)
+        a = re.sub(r'\s+', ' ', a)
+        for j in range(5):
+            a = re.sub(r'([A-Z])\. ([A-Z])\.', r'\1.\2.', a)
+        a = a.strip().replace(' ', '&nbsp;')
+
+        # Join it by a comma or "and".
         if i == len(authors) - 2:
             a += ' and '
         elif i <= len(authors) - 3:
             a += ', '
         aa.append(a)
 
-    s = ''.join(aa)
-
-    s = re.sub(r'\.', '. ', s)
-    s = re.sub(r'\s+', ' ', s)
-    for i in range(5):
-        s = re.sub(r'([A-Z])\. ([A-Z])\.', r'\1.\2.', s)
-
-    return s
+    return ''.join(aa)
 
 
 def _get_authors(entry):
@@ -147,7 +152,7 @@ def _cv_journal(entry):
         entry['journal'],
         entry['volume'],
         entry['year'],
-        entry['pages'],
+        entry['pages'].replace('-', '&ndash;'),
     )
     if 'doi' in entry:
         s = '[{0}](https://doi.org/{1})'.format(s, entry['doi'])
@@ -161,6 +166,10 @@ def _cv_preprint(entry):
         return None
 
     if entry['archiveprefix'] == 'arXiv':
+        if entry['eprint'].find('/') >= 0:
+            return '[arXiv:{0}](https://arxiv.org/abs/{0})'.format(
+                entry['eprint'],
+            )
         if 'primaryclass' in entry:
             return '[arXiv:{0} [{1}]](https://arxiv.org/abs/{0})'.format(
                 entry['eprint'],
@@ -170,15 +179,37 @@ def _cv_preprint(entry):
     return None
 
 
+def _make_link(text, url):
+    return '[<small>[{0}]</small>]({1})'.format(text, url)
+
+
 def _cv_inspire(entry):
     if 'eprint' in entry and 'archiveprefix' in entry:
         if entry['archiveprefix'] == 'arXiv':
-            return (
-                '[<small>[INSPIRE]</small>]'
-                '(https://inspirehep.net/search?p=find+eprint+{0})'
-            ).format(entry['eprint'])
+            if ('primaryclass' in entry and
+                    entry['primaryclass'] in ('hep-lat', 'hep-ph', 'hep-th')):
+                return _make_link(
+                    'INSPIRE',
+                    'https://inspirehep.net/search?p=find+eprint+{0}'.format(
+                        entry['eprint'])
+                )
+
+    if 'inspirehep' in entry:
+        return _make_link(
+            'INSPIRE',
+            'https://inspirehep.net/search?p=find+{0}'.format(
+                entry['inspirehep'])
+        )
 
     return None
+
+
+def _cv_github(entry):
+    if 'github' in entry:
+        return _make_link(
+            'GitHub',
+            'https://github.com/{0}'.format(entry['github'])
+        )
 
 
 class StringList(list):
