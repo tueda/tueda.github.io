@@ -1,8 +1,11 @@
 """Python Markdown BibTeX extension."""
 
+from __future__ import unicode_literals
+
 import re
 
 import bibtexparser
+from bibtexparser.bparser import BibTexParser
 
 from markdown import Extension
 from markdown.preprocessors import Preprocessor
@@ -29,7 +32,8 @@ class BibTeXPreprocessor(Preprocessor):
             else:
                 if line[:1] == '}' and not line[1:].strip():
                     current_block.append('}')
-                    result_lines = self.parse_bibtex_entry(current_block)
+                    result_lines = self.parse_bibtex_entry(
+                        '\n'.join(current_block))
                     if result_lines:
                         new_lines += result_lines
                     else:
@@ -42,38 +46,39 @@ class BibTeXPreprocessor(Preprocessor):
             new_lines += current_block
         return new_lines
 
-    def parse_bibtex_entry(self, lines):
+    def parse_bibtex_entry(self, string):
         """Parse a BibTeX entry."""
-        entries = bibtexparser.loads('\n'.join(lines)).entries
+        # BibTeXParser considers an entry type starting with "comment" as
+        # a special one and loads() returns nothing. Make a workaround.
+        comment_magic = '__dont_ignore_comment__'
+
+        string = re.sub('^@comment', '@' + comment_magic, string)
+
+        parser = BibTexParser()
+        parser.ignore_nonstandard_types = False
+        entries = bibtexparser.loads(string, parser=parser).entries
         if len(entries) != 1:
             return None
         entry = entries[0]
 
-        # Canonicalize spaces in "title" and "author".
-        for key in ('title', 'author'):
-            if key in entry:
-                entry[key] = re.sub(r'\s+', ' ', entry[key].strip())
+        if entry['ENTRYTYPE'].startswith(comment_magic):
+            # An empty line indicates that the parsing succeeded, but it was a
+            # comment. Will be discarded by the caller.
+            return ['']
 
-        # Accent and special characters in LaTeX.
-        simple_replacements = {
-            '\\"A': u"\u00C4",
-            '\\"a': u"\u00E4",
-            '\\"O': u"\u00D6",
-            '\\"o': u"\u00F6",
-            '\\"U': u"\u00DC",
-            '\\"u': u"\u00FC",
-        }
         for key in entry:
             s = entry[key]
-            for r in simple_replacements:
-                # One often writes {\"o} in BibTeX: the curly braces should be
-                # removed.
-                s = s.replace('{{{0}}}'.format(r), simple_replacements[r])
-                s = s.replace(r, simple_replacements[r])
+
+            # Canonicalize spaces.
+            s = re.sub(r'\n', ' ', s)
+            s = re.sub(r'\s\s+', ' ', s)
+
+            s = _latex_to_unicode(s)
+
             entry[key] = s
 
+        # Dispatch the entry to the method for this style and the entry type.
         format_name = '_format_' + self._style + '_' + entry['ENTRYTYPE']
-
         if hasattr(self, format_name):
             lines = getattr(self, format_name)(entry)
             if lines:
@@ -95,10 +100,119 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add(_cv_journal(entry))
         lines.add_sep()
         lines.add(_cv_preprint(entry))
+        lines.cancel_sep()
         lines.add(_cv_inspire(entry))
         lines.add(_cv_github(entry))
+        lines.add_break()
+        lines.add(_cv_proceedings_info(entry))
 
         return lines
+
+
+def _latex_to_unicode(s):
+    # Accent and special characters in LaTeX.
+    simple_replacements = {
+        '\\"A': u"\u00C4",
+        '\\"a': u"\u00E4",
+        '\\"O': u"\u00D6",
+        '\\"o': u"\u00F6",
+        '\\"U': u"\u00DC",
+        '\\"u': u"\u00FC",
+        "\\'i": u"\u00ED",
+    }
+
+    for r in simple_replacements:
+        # One often writes {\"o} in BibTeX: the curly braces should be removed.
+        s = s.replace('{{{0}}}'.format(r), simple_replacements[r])
+        s = s.replace(r, simple_replacements[r])
+
+    return s
+
+
+def _ndashify(s):
+    # Smart "dash". Don't apply it for URLs.
+    months = (
+        r'January|February|March|April|May|June|'
+        r'July|August|September|October|November|December'
+    )
+
+    return re.sub(
+        r'(\d|' + months + r')-(\d|' + months + r')',
+        r'\1&ndash;\2', s)
+
+
+def _apostrophify(s):
+    # Single "'" is presumably an apostrophe. SmartyPants has a problem
+    # for it. To avoid the problem, "'" needs to be replaced. Don't apply it
+    # for math expressions, which may contain derivatives.
+    if s.count("'") == 1:
+        s = s.replace("'", '&#39;')
+    return s
+
+
+def _canonicalize_author(s):
+    # "bbb, aaa" -> "aaa bbb".
+    s = s.split(',', 2)
+
+    if len(s) == 1:
+        s = s[0]
+    else:
+        s = s[1] + s[0]
+
+    # Handle spaces in an author name.
+    s = re.sub(r'\.', '. ', s)
+    s = re.sub(r'\s+', ' ', s)
+    for j in range(5):
+        s = re.sub(r'([A-Z])\. ([A-Z])\.', r'\1.\2.', s)
+    s = s.strip().replace(' ', '&nbsp;')
+
+    return s
+
+
+def _canonicalize_date(s):
+    months = (
+        r'January|February|March|April|May|June|'
+        r'July|August|September|October|November|December'
+    )
+
+    # Example: April 1-May 5, 2000 -> 1 April-5 May 2000
+    m = re.search(
+        r'(' + months + r')\s+(\d+)-(' + months + ')\s+(\d+)\s*,\s*(\d+)', s)
+    if m:
+        s = '{0}{1} {2}-{3} {4} {5}{6}'.format(
+            s[:m.start()],
+            m.group(2),
+            m.group(1),
+            m.group(4),
+            m.group(3),
+            m.group(5),
+            s[m.end():]
+        )
+
+    # Example: April 1-5, 2000 -> 1-5 April 2000
+    m = re.search(r'(' + months + r')\s+(\d+-\d+)\s*,\s*(\d+)', s)
+    if m:
+        s = '{0}{1} {2} {3}{4}'.format(
+            s[:m.start()],
+            m.group(2),
+            m.group(1),
+            m.group(3),
+            s[m.end():]
+        )
+
+    s = _ndashify(s)
+    return s
+
+
+def _get_authors(entry):
+    """Read the authors in an entry and return a list of strings."""
+    authors = re.split(r'\band\b', entry['author'])
+
+    return [_canonicalize_author(a) for a in authors]
+
+
+def _make_link(text, url):
+    return '[<small>[{0}]</small>]({1})'.format(text, url)
 
 
 def _cv_author(entry):
@@ -108,12 +222,6 @@ def _cv_author(entry):
     authors = _get_authors(entry)
     aa = []
     for i, a in enumerate(authors):
-        # Handle spaces in an author name.
-        a = re.sub(r'\.', '. ', a)
-        a = re.sub(r'\s+', ' ', a)
-        for j in range(5):
-            a = re.sub(r'([A-Z])\. ([A-Z])\.', r'\1.\2.', a)
-        a = a.strip().replace(' ', '&nbsp;')
 
         # Join it by a comma or "and".
         if i == len(authors) - 2:
@@ -125,35 +233,28 @@ def _cv_author(entry):
     return ''.join(aa)
 
 
-def _get_authors(entry):
-    authors = re.split(r'\band\b', entry['author'])
-
-    def normalize_author(s):
-        s = s.split(',', 2)
-        if len(s) == 1:
-            s = s[1]
-        else:
-            s = s[1] + s[0]
-        return s
-
-    return [normalize_author(a) for a in authors]
-
-
 def _cv_journal(entry):
     if 'journal' not in entry:
-        return None
-    if 'volume' not in entry:
         return None
     if 'year' not in entry:
         return None
     if 'pages' not in entry:
         return None
-    s = '{0} {1} ({2}) {3}'.format(
-        entry['journal'],
-        entry['volume'],
-        entry['year'],
-        entry['pages'].replace('-', '&ndash;'),
-    )
+    if 'volume' in entry:
+        s = '{0} **{1}** ({2}) {3}'.format(
+            entry['journal'],
+            entry['volume'],
+            entry['year'],
+            entry['pages'],
+        )
+    else:
+        s = '{0} ({1}) {2}'.format(
+            entry['journal'],
+            entry['year'],
+            entry['pages'],
+        )
+    s = _ndashify(s)
+    s = _apostrophify(s)
     if 'doi' in entry:
         s = '[{0}](https://doi.org/{1})'.format(s, entry['doi'])
     return s
@@ -177,10 +278,6 @@ def _cv_preprint(entry):
             )
 
     return None
-
-
-def _make_link(text, url):
-    return '[<small>[{0}]</small>]({1})'.format(text, url)
 
 
 def _cv_inspire(entry):
@@ -212,6 +309,32 @@ def _cv_github(entry):
         )
 
 
+def _cv_proceedings_info(entry):
+    if 'booktitle' not in entry:
+        return None
+
+    # Example: Proceedings, Conference name: place, date
+    m = re.search('Proceedings,(.*):([^:]*)$', entry['booktitle'])
+    if m:
+        confname = m.group(1).strip()
+        confplace = m.group(2).strip()  # also date
+
+        if 'confurl' in entry:
+            confname = '[{0}]({1})'.format(confname, entry['confurl'])
+
+        confplace = _canonicalize_date(confplace)
+
+        s = 'Proceedings for {0}, {1}'.format(confname, confplace)
+
+        if 'speaker' in entry:
+            s += ' (Speaker:&nbsp;{0})'.format(
+                _canonicalize_author(entry['speaker']))
+
+        return s
+
+    return None
+
+
 class StringList(list):
     """List for strings."""
 
@@ -220,22 +343,24 @@ class StringList(list):
         super(StringList, self).__init__(*args)
         self._clean = True
         self._sep = False
+        self._cancel_sep = False
         self._break = False
 
     def _update(self):
-        if self._sep:
+        if self._sep and not self._cancel_sep:
             self[-1] += ','
         if self._break:
             self[-1] += '  '
         self._clean = True
         self._sep = False
+        self._cancel_sep = False
         self._break = False
 
     def add(self, s):
         """Add a line."""
         if s:
             self._update()
-            self.append(s)
+            self.append(s.strip())
             self._clean = False
 
     def add_sep(self):
@@ -243,12 +368,23 @@ class StringList(list):
         if not self._clean:
             self._clean = True
             self._sep = True
+            self._cancel_sep = False
+
+    def cancel_sep(self):
+        """Remove a comma from the end of the last line."""
+        if self._sep:
+            self._cancel_sep = True
 
     def add_break(self):
         """Add a line break."""
         if not self._clean:
             self._clean = True
             self._sep = False
+            self._cancel_sep = False
+            self._break = True
+        elif self._sep:
+            self._sep = False
+            self._cancel_sep = False
             self._break = True
 
     def add_period(self):
