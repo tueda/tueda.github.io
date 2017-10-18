@@ -16,6 +16,7 @@ class BibTeXPreprocessor(Preprocessor):
 
     def __init__(self, config):
         """Construct a BibTeX preprocessor."""
+        self._format = config['format'].lower()
         self._style = config['style'].lower()
 
     def run(self, lines):
@@ -78,7 +79,8 @@ class BibTeXPreprocessor(Preprocessor):
             entry[key] = s
 
         # Dispatch the entry to the method for this style and the entry type.
-        format_name = '_format_' + self._style + '_' + entry['ENTRYTYPE']
+        format_name = ('_format_' + self._format + '_' + self._style + '_' +
+                       entry['ENTRYTYPE'])
         if hasattr(self, format_name):
             lines = getattr(self, format_name)(entry)
             if lines:
@@ -88,12 +90,14 @@ class BibTeXPreprocessor(Preprocessor):
 
         return None
 
-    def _format_cv_article(self, entry):
+    def _format_html_cv_article(self, entry):
         if 'title' not in entry or 'author' not in entry:
             return None
 
         lines = StringList()
-        lines.add('**{0}**'.format(entry['title']))
+        lines.add(_cv_title(entry))
+        lines.add_break()
+        lines.add(_cv_subtitle(entry))
         lines.add_break()
         lines.add(_cv_author(entry))
         lines.add_break()
@@ -105,6 +109,25 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add(_cv_github(entry))
         lines.add_break()
         lines.add(_cv_proceedings_info(entry))
+
+        return lines
+
+    def _format_html_cv_phdthesis(self, entry):
+        if 'title' not in entry:
+            return None
+
+        lines = StringList()
+        lines.add(_cv_title(entry))
+        lines.add_break()
+        lines.add(_cv_subtitle(entry))
+        lines.add_break()
+        if 'month' in entry:
+            lines.add(entry['month'])
+        if 'year' in entry:
+            lines.add(entry['year'])
+        lines.add_sep()
+        if 'school' in entry:
+            lines.add(entry['school'])
 
         return lines
 
@@ -213,6 +236,20 @@ def _get_authors(entry):
 
 def _make_link(text, url):
     return '[<small>[{0}]</small>]({1})'.format(text, url)
+
+
+def _cv_title(entry):
+    if 'title' not in entry:
+        return None
+
+    return '**{0}**'.format(entry['title'])
+
+
+def _cv_subtitle(entry):
+    if 'subtitle' not in entry:
+        return None
+
+    return '(*{0}*&thinsp;)'.format(entry['subtitle'])
 
 
 def _cv_author(entry):
@@ -403,6 +440,7 @@ class BibTeXExtension(Extension):
     def __init__(self, **kwargs):
         """Construct a BibTeX extension."""
         self.config = {
+            'format': 'html',
             'style': 'cv',
         }
         super(BibTeXExtension, self).__init__(**kwargs)

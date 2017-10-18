@@ -11,6 +11,10 @@
 
 {!bibtex/proceedings.bib!}
 
+## Doctoral Thesis
+
+{!bibtex/thesis.bib!}
+
 ## Software Release Notes
 
 {!bibtex/releasenotes.bib!}
