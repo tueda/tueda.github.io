@@ -17,7 +17,7 @@
 
 ## Software Release Notes
 
-{!bibtex/releasenotes.bib!}
+{!bibtex/release-notes.bib!}
 
 ## Preprints
 

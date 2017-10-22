@@ -109,6 +109,8 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add(_cv_github(entry))
         lines.add_break()
         lines.add(_cv_proceedings_info(entry))
+        lines.cancel_sep()
+        lines.add(_cv_note(entry))
 
         return lines
 
@@ -121,13 +123,43 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add_break()
         lines.add(_cv_subtitle(entry))
         lines.add_break()
-        if 'month' in entry:
-            lines.add(entry['month'])
-        if 'year' in entry:
-            lines.add(entry['year'])
+        lines.add(_cv_author(entry))
+        lines.add_break()
+        lines.add(_get_field(entry, 'month'))
+        lines.add(_get_field(entry, 'year'))
         lines.add_sep()
-        if 'school' in entry:
-            lines.add(entry['school'])
+        lines.add(_get_field(entry, 'school'))
+        lines.cancel_sep()
+        lines.add(_cv_note(entry))
+
+        return lines
+
+    def _format_html_cv_talk(self, entry):
+        if 'title' not in entry:
+            return None
+
+        lines = StringList()
+        lines.add(_cv_title(entry))
+        lines.add_break()
+        lines.add(_cv_subtitle(entry))
+        lines.add_break()
+        lines.add(_cv_author(entry))
+        lines.add_break()
+        lines.add(_cv_conftitle(entry))
+        lines.add_sep()
+        lines.add(_cv_progno(entry))
+        lines.add_sep()
+        lines.add(_get_field(entry, 'place'))
+        lines.add_sep()
+        lines.add(_get_field(entry, 'city'))
+        lines.add_sep()
+        lines.add(_get_field(entry, 'country'))
+        lines.add_sep()
+        lines.add(_cv_date(entry))
+        lines.cancel_sep()
+        lines.add(_cv_note(entry))
+        lines.add(_cv_cinii(entry))
+        lines.add(_cv_slides(entry))
 
         return lines
 
@@ -180,7 +212,7 @@ def _canonicalize_author(s):
     if len(s) == 1:
         s = s[0]
     else:
-        s = s[1] + s[0]
+        s = s[1] + ' ' + s[0]
 
     # Handle spaces in an author name.
     s = re.sub(r'\.', '. ', s)
@@ -223,8 +255,25 @@ def _canonicalize_date(s):
             s[m.end():]
         )
 
+    # Example: April 1, 2000 -> 1 April 2000
+    m = re.search(r'(' + months + r')\s+(\d+)\s*,\s*(\d+)', s)
+    if m:
+        s = '{0}{1} {2} {3}{4}'.format(
+            s[:m.start()],
+            m.group(2),
+            m.group(1),
+            m.group(3),
+            s[m.end():]
+        )
+
     s = _ndashify(s)
     return s
+
+
+def _get_field(entry, field):
+    if field not in entry:
+        return None
+    return entry[field]
 
 
 def _get_authors(entry):
@@ -256,18 +305,30 @@ def _cv_author(entry):
     if 'author' not in entry:
         return None
 
+    def has_cjk(string):
+        import unicodedata
+        for c in string:
+            name = unicodedata.name(c)
+            if ('CJK UNIFIED' in name or 'HIRAGANA' in name or
+                    'KATAKANA' in name):
+                return True
+        return False
+
     authors = _get_authors(entry)
-    aa = []
-    for i, a in enumerate(authors):
 
-        # Join it by a comma or "and".
-        if i == len(authors) - 2:
-            a += ' and '
-        elif i <= len(authors) - 3:
-            a += ', '
-        aa.append(a)
+    if any(has_cjk(a) for a in authors):
+        return ', '.join(authors)
+    else:
+        aa = []
+        for i, a in enumerate(authors):
 
-    return ''.join(aa)
+            # Join it by a comma or "and".
+            if i == len(authors) - 2:
+                a += ' and '
+            elif i <= len(authors) - 3:
+                a += ', '
+            aa.append(a)
+        return ''.join(aa)
 
 
 def _cv_journal(entry):
@@ -346,6 +407,22 @@ def _cv_github(entry):
         )
 
 
+def _cv_cinii(entry):
+    if 'cinii' in entry:
+        return _make_link(
+            'CiNii',
+            'http://ci.nii.ac.jp/naid/{0}'.format(entry['cinii'])
+        )
+
+
+def _cv_slides(entry):
+    if 'slidesurl' in entry:
+        return _make_link(
+            'Slides',
+            entry['slidesurl']
+        )
+
+
 def _cv_proceedings_info(entry):
     if 'booktitle' not in entry:
         return None
@@ -370,6 +447,40 @@ def _cv_proceedings_info(entry):
         return s
 
     return None
+
+
+def _cv_conftitle(entry):
+    if 'conftitle' not in entry:
+        return None
+
+    s = entry['conftitle']
+    if 'confabbr' in entry:
+        s += ' (' + entry['confabbr'] + ')'
+    if 'confurl' in entry:
+        s = '[{0}]({1})'.format(s, entry['confurl'])
+
+    return s
+
+
+def _cv_date(entry):
+    if 'date' not in entry:
+        return None
+    return _canonicalize_date(entry['date'])
+
+
+def _cv_progno(entry):
+    if 'progno' not in entry:
+        return None
+    s = entry['progno']
+    if 'progurl' in entry:
+        s = '[{0}]({1})'.format(s, entry['progurl'])
+    return s
+
+
+def _cv_note(entry):
+    if 'note' not in entry:
+        return None
+    return '({0})'.format(entry['note'])
 
 
 class StringList(list):

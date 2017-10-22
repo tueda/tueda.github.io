@@ -2,4 +2,8 @@
 
 ## Oral Presentations in International Scientific Meetings
 
-## Other Presentations
+{!bibtex/intl-talks.bib!}
+
+## Other Presentations and Seminars
+
+{!bibtex/other-talks.bib!}

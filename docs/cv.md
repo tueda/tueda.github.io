@@ -40,21 +40,21 @@ Apr 1998 - Mar 2002
 ## Positions Held
 
 Oct 2014 - present
-: Postdoc,
+: Postdoc (Senior Technical Researcher),
   [Nikhef](https://www.nikhef.nl/en/)
   [theory group](https://www.nikhef.nl/pub/theory/)
 
 Apr 2011 - Sep 2014
-: Postdoc,
+: Postdoc (Wissenschaftliche Mitarbeiter),
   [Institute for Theoretical Particle Physics](https://www.ttp.kit.edu/en/),
   [Karlsruhe Institute of Technology](https://www.kit.edu/english/)
 
 Apr 2009 - Mar 2011
-: Researcher,
+: Postdoc (研究員),
   [Graduate School of Pure and Applied Sciences](http://www.pas.tsukuba.ac.jp/english/),
   [U. of Tsukuba](http://www.tsukuba.ac.jp/en/)
 
 Apr 2007 - Mar 2009
-: Postdoctoral fellow,
+: Postdoc (博士研究員),
   [Computing Research Center](http://research.kek.jp/group/crc/index-e.html),
   [KEK](https://www.kek.jp/en/)
