@@ -1,5 +1,6 @@
 site_name: 'Takahiro Ueda''s page'
 site_author: 'Takahiro Ueda'
+copyright: '&copy; 2017 Takahiro Ueda'
 
 pages:
   - Home: index.md
@@ -8,6 +9,16 @@ pages:
   - Talks: talks.md
 
 theme: material
+
+extra:
+  logo:
+    icon: 'home'
+  palette:
+    primary: 'indigo'
+    accent: 'indigo'
+  social:
+    - type: 'github'
+      link: 'https://github.com/tueda'
 
 markdown_extensions:
   - markdown.extensions.attr_list
