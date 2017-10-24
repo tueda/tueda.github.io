@@ -1,0 +1,17 @@
+.dep/
+*.ax1
+*.ax2
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fls
+*.log
+*.nav
+*.out
+*.pdf
+*.ps
+*.snm
+*.tar.gz
+*.toc
+*.vrb

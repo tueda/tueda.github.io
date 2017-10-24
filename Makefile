@@ -9,3 +9,4 @@ serve:
 
 clean:
 	rm -rf site */*.pyc
+	make -C latex clean
