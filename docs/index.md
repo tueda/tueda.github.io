@@ -8,4 +8,5 @@ Address
 : [Science Park 105, 1098 XG Amsterdam, The Netherlands](https://maps.google.com?q=Science+Park+105+1098+XG+Amsterdam)
 
 E-mail
-: &#116;&#117;&#101;&#100;&#97;&#64;&#110;&#105;&#107;&#104;&#101;&#102;&#46;&#110;&#108;
+: tueda - at - nikhef.nl
+{: .ead}

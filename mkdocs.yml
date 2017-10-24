@@ -34,6 +34,7 @@ extra_css:
   - css/extra.css
 
 extra_javascript:
+  - js/eads-start.js
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js
   - js/katex-start.js
