@@ -26,7 +26,8 @@ markdown_extensions:
   - markdown_include.include:
       base_path: docs
   - markdown.extensions.smarty
-  - pymdownx.arithmatex
+  - pymdownx.arithmatex:
+      generic: true
   - bibtex
 
 extra_css:
