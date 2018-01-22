@@ -120,6 +120,9 @@ class BibTeXPreprocessor(Preprocessor):
 
         return lines
 
+    def _format_html_cv_inproceedings(self, entry):
+        return self._format_html_cv_article(entry)
+
     def _format_html_cv_phdthesis(self, entry):
         if 'title' not in entry:
             return None
@@ -187,6 +190,9 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add_period()
 
         return lines
+
+    def _format_latex_cv_inproceedings(self, entry):
+        return self._format_latex_cv_article(entry)
 
     def _format_latex_cv_phdthesis(self, entry):
         if 'title' not in entry:
@@ -298,7 +304,7 @@ class BibTeXPreprocessor(Preprocessor):
         # Handle spaces in an author name.
         s = re.sub(r'\.', '. ', s)
         s = re.sub(r'\s+', ' ', s)
-        for j in range(5):
+        for _ in range(5):
             s = re.sub(r'([A-Z])\. ([A-Z])\.', r'\1.\2.', s)
         s = s.strip().replace(' ', '&nbsp;')
 

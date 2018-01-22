@@ -20,7 +20,7 @@ E-mail
 ## Education
 
 Apr 2004 - Mar 2007
-: [Dept. of Physics](http://www.phys.ynu.ac.jp/english/),
+: [Dept. of Physics](http://www.phys.ynu.ac.jp/eng/),
   [Graduate School of Engineering](http://gakufu.eng.ynu.ac.jp/english/),
   [Yokohama Natl. U](http://www.ynu.ac.jp/english/)  
   Doctor of Engineering (Mar 2007)  
@@ -28,20 +28,20 @@ Apr 2004 - Mar 2007
   (adviser: Ken Sasaki)
 
 Apr 2002 - Mar 2004
-: [Dept. of Physics](http://www.phys.ynu.ac.jp/english/),
+: [Dept. of Physics](http://www.phys.ynu.ac.jp/eng/),
   [Graduate School of Engineering](http://gakufu.eng.ynu.ac.jp/english/),
   [Yokohama Natl. U](http://www.ynu.ac.jp/english/)  
   Master of Engineering (Mar 2004)
 
 Apr 1998 - Mar 2002
-: [Dept. of Physics](http://www.phys.ynu.ac.jp/english/),
+: [Dept. of Physics](http://www.phys.ynu.ac.jp/eng/),
   [Faculty of Engineering](http://www.eng.ynu.ac.jp/english/),
   [Yokohama Natl. U](http://www.ynu.ac.jp/english/)  
   Bachelor of Engineering (Mar 2002)
 
 ## Positions Held
 
-Oct 2014 - present
+Oct 2014 - Mar 2018
 : Postdoc (Senior Technical Researcher),
   [Nikhef](https://www.nikhef.nl/en/)
   [theory group](https://www.nikhef.nl/pub/theory/)
