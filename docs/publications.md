@@ -15,9 +15,9 @@
 
 {!bibtex/thesis.bib!}
 
-## Software Release Notes
+## Software Documents
 
-{!bibtex/release-notes.bib!}
+{!bibtex/software-documents.bib!}
 
 ## Preprints
 
