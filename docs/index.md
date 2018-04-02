@@ -1,12 +1,20 @@
 # Takahiro Ueda (植田高寛) {: .profile}
 
 Affiliation
-: [Nikhef](https://www.nikhef.nl/en/)
-  [theory group](https://www.nikhef.nl/pub/theory/)
+: Department of Materials and Life Science,  
+  Faculty of Science and Technology,  
+  [Seikei University](https://www.seikei.ac.jp/university/eng/)  
+  ([成蹊大学](https://www.seikei.ac.jp/university/)
+   [理工学部](https://www.seikei.ac.jp/university/rikou/)
+   [物質生命理工学科](https://www.seikei.ac.jp/university/rikou/department/bio/)
+   [数理解析研究室](http://www.ml.seikei.ac.jp/SUURI/))
 
 Address
-: [Science Park 105, 1098 XG Amsterdam, The Netherlands](https://maps.google.com?q=Science+Park+105+1098+XG+Amsterdam)
+: [3-3-1 Kichijoji-Kitamachi, Musashino-shi, Tokyo 180-8633, Japan](https://www.google.com/maps/search/3-3-1+Kichijoji-Kitamachi,+Musashino-shi,+Tokyo+180-8633,+Japan)
+
+Room
+: Bldg. 12, 5th floor, \#2501C
 
 E-mail
-: tueda - at - nikhef.nl
+: tueda - at - st.seikei.ac.jp
 {: .ead}

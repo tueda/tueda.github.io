@@ -4,59 +4,66 @@ Name
 : Takahiro Ueda
 
 Position
-: Postdoc
+: Assistant professor
 
 Affiliation
-: [Nikhef](https://www.nikhef.nl/en/)
-  [theory group](https://www.nikhef.nl/pub/theory/)
+: Department of Materials and Life Science,  
+  Faculty of Science and Technology,  
+  [Seikei University](https://www.seikei.ac.jp/university/eng/)
 
 Address
-: [Science Park 105, 1098 XG Amsterdam, The Netherlands](https://maps.google.com?q=Science+Park+105+1098+XG+Amsterdam)
+: [3-3-1 Kichijoji-Kitamachi, Musashino-shi, Tokyo 180-8633, Japan](https://www.google.com/maps/search/3-3-1+Kichijoji-Kitamachi,+Musashino-shi,+Tokyo+180-8633,+Japan)
 
 E-mail
-: tueda - at - nikhef.nl
+: tueda - at - st.seikei.ac.jp
 {: .ead}
 
 ## Education
 
-Apr 2004 - Mar 2007
-: [Dept. of Physics](http://www.phys.ynu.ac.jp/eng/),
+April 2004 -- March 2007
+: [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
   [Graduate School of Engineering](http://gakufu.eng.ynu.ac.jp/english/),
-  [Yokohama Natl. U](http://www.ynu.ac.jp/english/)  
-  Doctor of Engineering (Mar 2007)  
+  [Yokohama National University](http://www.ynu.ac.jp/english/)  
+  Doctor of Engineering (March 2007)  
   Thesis: The virtual photon structure to the next-to-next-to-leading order in QCD  
   (adviser: Ken Sasaki)
 
-Apr 2002 - Mar 2004
-: [Dept. of Physics](http://www.phys.ynu.ac.jp/eng/),
+April 2002 -- March 2004
+: [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
   [Graduate School of Engineering](http://gakufu.eng.ynu.ac.jp/english/),
-  [Yokohama Natl. U](http://www.ynu.ac.jp/english/)  
-  Master of Engineering (Mar 2004)
+  [Yokohama National University](http://www.ynu.ac.jp/english/)  
+  Master of Engineering (March 2004)
 
-Apr 1998 - Mar 2002
-: [Dept. of Physics](http://www.phys.ynu.ac.jp/eng/),
+April 1998 -- March 2002
+: [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
   [Faculty of Engineering](http://www.eng.ynu.ac.jp/english/),
-  [Yokohama Natl. U](http://www.ynu.ac.jp/english/)  
-  Bachelor of Engineering (Mar 2002)
+  [Yokohama National University](http://www.ynu.ac.jp/english/)  
+  Bachelor of Engineering (March 2002)
 
 ## Positions Held
 
-Oct 2014 - Mar 2018
-: Postdoc (Senior Technical Researcher),
+April 2018 --
+: Assistant professor (助教),  
+  Department of Materials and Life Science,
+  Faculty of Science and Technology,
+  [Seikei University](https://www.seikei.ac.jp/university/eng/)
+
+October 2014 - March 2018
+: Postdoc (Senior Technical Researcher),  
   [Nikhef](https://www.nikhef.nl/en/)
   [theory group](https://www.nikhef.nl/pub/theory/)
 
-Apr 2011 - Sep 2014
-: Postdoc (Wissenschaftliche Mitarbeiter),
+April 2011 - September 2014
+: Postdoc (Wissenschaftliche Mitarbeiter),  
   [Institute for Theoretical Particle Physics](https://www.ttp.kit.edu/en/),
   [Karlsruhe Institute of Technology](https://www.kit.edu/english/)
 
-Apr 2009 - Mar 2011
-: Postdoc (研究員),
+April 2009 - March 2011
+: Postdoc (研究員),  
   [Graduate School of Pure and Applied Sciences](http://www.pas.tsukuba.ac.jp/english/),
-  [U. of Tsukuba](http://www.tsukuba.ac.jp/en/)
+  [University of Tsukuba](http://www.tsukuba.ac.jp/en/)
 
-Apr 2007 - Mar 2009
-: Postdoc (博士研究員),
+April 2007 - March 2009
+: Postdoc (博士研究員),  
   [Computing Research Center](http://research.kek.jp/group/crc/index-e.html),
-  [KEK](https://www.kek.jp/en/)
+  [High Energy Accelerator Research Organization (KEK)](https://www.kek.jp/en/)
