@@ -74,6 +74,9 @@ class BibTeXPreprocessor(Preprocessor):
             s = re.sub(r'\n', ' ', s)
             s = re.sub(r'\s\s+', ' ', s)
 
+            if s[:1] == '{' and s[-1:] == '}':
+                s = s[1:-1]
+
             if self._format == 'html':
                 s = self._latex_to_unicode(s)
 
