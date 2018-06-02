@@ -31,11 +31,11 @@ markdown_extensions:
   - bibtex
 
 extra_css:
-  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css
   - css/extra.css
 
 extra_javascript:
   - js/eads-start.js
-  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js
-  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/contrib/auto-render.min.js
   - js/katex-start.js
