@@ -1,0 +1,30 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial,
+    "メイリオ", Meiryo, sans-serif;
+}
+.md-typeset dt {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.md-typeset dd {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+.profile+dl::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.profile+dl dt {
+  float: left;
+  clear: left;
+  min-width: 7em;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+.profile+dl dd {
+  float: left;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
