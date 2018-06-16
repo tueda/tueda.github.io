@@ -115,6 +115,7 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add(self._cv_preprint(entry))
         lines.cancel_sep()
         lines.add(self._cv_inspire(entry))
+        lines.add(self._cv_mathscinet(entry))
         lines.add(self._cv_github(entry))
         lines.add_break()
         lines.add(self._cv_proceedings_info(entry))
@@ -514,6 +515,15 @@ class BibTeXPreprocessor(Preprocessor):
                     entry['inspirehep'])
             )
 
+        return None
+
+    def _cv_mathscinet(self, entry):
+        if 'mr' in entry:
+            return self._make_button(
+                'MathSciNet',
+                'https://mathscinet.ams.org/mathscinet-getitem?mr={0}'.format(
+                    entry['mr'])
+            )
         return None
 
     def _cv_github(self, entry):
