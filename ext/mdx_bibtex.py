@@ -497,11 +497,10 @@ class BibTeXPreprocessor(Preprocessor):
         return None
 
     def _cv_inspire(self, entry):
-        if 'eprint' in entry and 'archiveprefix' in entry:
-            if entry['archiveprefix'] == 'arXiv':
-                if ('primaryclass' in entry and
-                        (entry['primaryclass'] in
-                            ('hep-lat', 'hep-ph', 'hep-th'))):
+        if 'slaccitation' in entry:
+            # This BibTex entry most likely is taken from INSPIRE-HEP.
+            if 'eprint' in entry and 'archiveprefix' in entry:
+                if entry['archiveprefix'] == 'arXiv':
                     return self._make_button(
                         'INSPIRE',
                         ('https://inspirehep.net/search?'
