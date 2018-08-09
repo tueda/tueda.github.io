@@ -173,6 +173,7 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add(self._cv_note(entry))
         lines.add(self._cv_cinii(entry))
         lines.add(self._cv_slides(entry))
+        lines.add(self._cv_video(entry))
 
         return lines
 
@@ -536,7 +537,7 @@ class BibTeXPreprocessor(Preprocessor):
         if 'cinii' in entry:
             return self._make_button(
                 'CiNii',
-                'http://ci.nii.ac.jp/naid/{0}'.format(entry['cinii'])
+                'https://ci.nii.ac.jp/naid/{0}'.format(entry['cinii'])
             )
 
     def _cv_slides(self, entry):
@@ -544,6 +545,13 @@ class BibTeXPreprocessor(Preprocessor):
             return self._make_button(
                 'Slides',
                 entry['slidesurl']
+            )
+
+    def _cv_video(self, entry):
+        if 'youtube' in entry:
+            return self._make_button(
+                'Video',
+                'https://www.youtube.com/watch?v={0}'.format(entry['youtube'])
             )
 
     def _cv_proceedings_info(self, entry):
