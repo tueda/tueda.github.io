@@ -546,6 +546,19 @@ class BibTeXPreprocessor(Preprocessor):
                 'Slides',
                 entry['slidesurl']
             )
+        if 'speakerdeck' in entry:
+            if entry['speakerdeck'].endswith('.pdf'):
+                # TODO: Is this a permalink?
+                return self._make_button(
+                    'Slides',
+                    ('https://speakerd.s3.amazonaws.com/'
+                     'presentations/{0}'.format(entry['speakerdeck']))
+                )
+            else:
+                return self._make_button(
+                    'Slides',
+                    'https://speakerdeck.com/{0}'.format(entry['speakerdeck'])
+                )
 
     def _cv_video(self, entry):
         if 'youtube' in entry:
