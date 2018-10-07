@@ -2,7 +2,7 @@ site_name: 'Takahiro Ueda''s page'
 site_author: 'Takahiro Ueda'
 copyright: '&copy; 2018 Takahiro Ueda'
 
-pages:
+nav:
   - Home: index.md
   - CV: cv.md
   - Publications: publications.md
@@ -28,7 +28,7 @@ markdown_extensions:
   - markdown.extensions.smarty
   - pymdownx.arithmatex:
       generic: true
-  - bibtex
+  - mdx_bibtex
 
 extra_css:
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css
