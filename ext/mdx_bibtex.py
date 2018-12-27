@@ -144,6 +144,7 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add(self._get_field(entry, 'school'))
         lines.cancel_sep()
         lines.add(self._cv_note(entry))
+        lines.add(self._cv_ndl(entry))
 
         return lines
 
@@ -538,6 +539,13 @@ class BibTeXPreprocessor(Preprocessor):
             return self._make_button(
                 'CiNii',
                 'https://ci.nii.ac.jp/naid/{0}'.format(entry['cinii'])
+            )
+
+    def _cv_ndl(self, entry):
+        if 'ndl' in entry:
+            return self._make_button(
+                'NDL',
+                'https://id.ndl.go.jp/bib/{0}'.format(entry['ndl'])
             )
 
     def _cv_slides(self, entry):
