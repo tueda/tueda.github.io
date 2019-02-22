@@ -8,14 +8,15 @@ nav:
   - Publications: publications.md
   - Talks: talks.md
 
-theme: material
-
-extra:
-  logo:
-    icon: 'home'
+theme:
+  name: 'material'
   palette:
     primary: 'indigo'
     accent: 'indigo'
+  logo:
+    icon: 'home'
+
+extra:
   social:
     - type: 'github'
       link: 'https://github.com/tueda'
@@ -28,6 +29,8 @@ markdown_extensions:
   - markdown.extensions.smarty
   - pymdownx.arithmatex:
       generic: true
+  - toc:
+      permalink: true
   - mdx_bibtex
 
 extra_css:
