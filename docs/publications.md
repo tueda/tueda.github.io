@@ -15,10 +15,6 @@
 
 {!bibtex/thesis.bib!}
 
-## Software Documents
-
-{!bibtex/software-documents.bib!}
-
 ## Preprints
 
 {!bibtex/preprints.bib!}
