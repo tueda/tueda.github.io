@@ -27,6 +27,10 @@
   An extension of the [axodraw2](https://www.ctan.org/pkg/axodraw2) package.
   <small>[[Raw]](https://gist.githubusercontent.com/tueda/5d8a7ff9181ef630160703606f449597/raw/axodraw2e.sty)</small>
 
+- [beamertheme-naive](https://github.com/tueda/beamertheme-naive):
+  A simple [beamer](https://github.com/josephwright/beamer) theme.
+  <small>[[Raw]](https://raw.githubusercontent.com/tueda/beamertheme-naive/master/beamerthemenaive.sty)</small>
+
 - [check-fold.py](https://gist.github.com/tueda/1e78d907130b0cd6c9b3)
   checks [stedi](https://www.nikhef.nl/~form/maindir/others/stedi/stedi.html)-folds.
   <small>[[Raw]](https://gist.githubusercontent.com/tueda/1e78d907130b0cd6c9b3/raw/check-fold.py)</small>
