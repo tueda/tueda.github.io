@@ -18,6 +18,12 @@ E-mail
 : tueda - at - st.seikei.ac.jp
 {: .ead}
 
+## Research interests
+
+My research concerns theoretical particle physics.
+Especially, I am interested in higher-order radiative corrections
+in perturbative quantum field theories and their applications to phenomenology.
+
 ## Education
 
 April 2004 -- March 2007
