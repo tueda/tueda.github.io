@@ -3,6 +3,30 @@
 # Makefile for typesetting LaTeX documents. Requires GNU Make 3.81 on Linux.
 # See "make help".
 #
+# This file is provided under the MIT License:
+#
+# MIT License
+#
+# Copyright (c) 2018-2019 Takahiro Ueda
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
 
 define help_message
 Makefile for LaTeX
@@ -12,7 +36,10 @@ Usage:
 
 Targets:
   all (default):
-    Create all possible documents in this directory.
+    Build all documents in the current directory.
+
+  all-recursive:
+    Build all documents in the source tree.
 
   help:
     Show this message.
@@ -27,7 +54,7 @@ Targets:
     Create tar-gzipped archives for arXiv submission.
 
   watch:
-    Watch the changes and automatically recreate documents in this directory.
+    Watch the changes and automatically rebuild documents.
 
   upgrade:
     Upgrade the setup.
@@ -53,6 +80,7 @@ default_target = pdf
 # - pdflatex (default)
 # - xelatex
 # - lualatex
+# - luajitlatex
 # Aliases:
 # - latex -> latex_dvips
 # - platex -> platex_dvips
@@ -86,13 +114,20 @@ MOSTLYCLEANFILES =
 # Additional files to clean.
 CLEANFILES =
 
-# Prerequisite make targets in subdirectories.
-PREREQUISITE_SUBDIRS =
+# Prerequisite Make targets in the current directory.
+PREREQUISITE =
+
+# Prerequisite Make targets in subdirectories.
+PREREQUISITE_SUBDIRS = NONE
+
+# Lint commands.
+LINTS = check_periods
 
 # Test scripts.
 TESTS =
 
 # The following variables will be guessed if empty.
+# XXX: in the current implementation, $(init_toolchain) overrides some of them.
 TARGET =
 SUBDIRS =
 LATEX =
@@ -109,9 +144,12 @@ AXOHELP =
 PDFCROP =
 EBB =
 EXTRACTBB =
+CONVBKMK =
 LATEXPAND =
 LATEXDIFF =
 SOFFICE =
+WGET =
+CURL =
 
 # Command options.
 LATEX_OPT = -interaction=nonstopmode -halt-on-error
@@ -129,9 +167,12 @@ AXOHELP_OPT =
 PDFCROP_OPT =
 EBB_OPT =
 EXTRACTBB_OPT =
+CONVBKMK_OPT = -g
 LATEXPAND_OPT = --expand-usepackage
 LATEXDIFF_OPT =
 SOFFICE_OPT =
+WGET_OPT =
+CURL_OPT =
 
 # ANSI escape code for colorization.
 CL_NORMAL = [0m
@@ -140,7 +181,7 @@ CL_WARN   = [35m
 CL_ERROR  = [31m
 
 .SUFFIXES:
-.SUFFIXES: .log .pdf .odt .eps .ps .jpg .dvi .fmt .tex .cls .sty .ltx .dtx
+.SUFFIXES: .log .bb .xbb .pdf .odt .eps .ps .jpg .png .dvi .fmt .tex .cls .sty .ltx .dtx
 
 DEPDIR = .dep
 DIFFDIR = .diff
@@ -266,11 +307,11 @@ get_rev = \
 	) \
 	$2=; \
 	$3=; \
-	if expr "$1" : '[^.]\{1,\}\.\.[^.]' >/dev/null; then \
-		$2=$$(expr "$1" : '\([^.]\{1,\}\)\.\.'); \
-		$3=$$(expr "$1" : '[^.]\{1,\}\.\.\(.\{1,\}\)'); \
-	elif expr "$1" : '[^.]\{1,\}\.\.$$' >/dev/null; then \
-		$2=$$(expr "$1" : '\([^.]\{1,\}\)\.\.'); \
+	if expr "$1" : '.*[^.]\.\.[^.]' >/dev/null; then \
+		$2=$$(expr "$1" : '\(.*[^.]\)\.\.'); \
+		$3=$$(expr "$1" : '.*[^.]\.\.\([^.].*\)'); \
+	elif expr "$1" : '.*[^.]\.\.$$' >/dev/null; then \
+		$2=$$(expr "$1" : '\(.*[^.]\)\.\.'); \
 	else \
 		$2="$1"; \
 	fi
@@ -310,7 +351,7 @@ init_toolchain_platex = \
 	$(init_toolchain_platex_dvips)
 
 init_toolchain_platex_dvips = \
-	$(eval typeset_mode = dvips) \
+	$(eval typeset_mode = dvips_convbkmk) \
 	$(eval tex_format = platex) \
 	$(eval LATEX = platex) \
 	$(eval BIBTEX = pbibtex) \
@@ -328,7 +369,7 @@ init_toolchain_uplatex = \
 	$(init_toolchain_uplatex_dvips)
 
 init_toolchain_uplatex_dvips = \
-	$(eval typeset_mode = dvips) \
+	$(eval typeset_mode = dvips_convbkmk) \
 	$(eval tex_format = uplatex) \
 	$(eval LATEX = uplatex) \
 	$(eval BIBTEX = upbibtex) \
@@ -359,7 +400,15 @@ init_toolchain_lualatex = \
 	$(eval BIBTEX = upbibtex) \
 	$(eval MAKEINDEX = upmendex)
 
-# The typeset mode: "dvips" or "dvipdf" or "pdflatex".
+init_toolchain_luajitlatex = \
+	$(eval typeset_mode = pdflatex) \
+	$(eval tex_format = luajitlatex) \
+	$(eval LATEX = luajittex) \
+	$(eval LATEX_OPT := --fmt=luajitlatex.fmt $(LATEX_OPT)) \
+	$(eval BIBTEX = upbibtex) \
+	$(eval MAKEINDEX = upmendex)
+
+# The typeset mode: "dvips" or "dvips_convbkmk" or "dvipdf" or "pdflatex".
 typeset_mode =
 
 # The TeX format.
@@ -449,15 +498,42 @@ extractbb = $(call cache,extractbb_impl) $(EXTRACTBB_OPT)
 
 extractbb_impl = $(call pathsearch2,extractbb,EXTRACTBB,extractbb)
 
-# $(latepand)
+# $(convbkmk)
+convbkmk = $(call cache,convbkmk_impl) $(CONVBKMK_OPT)
+
+convbkmk_impl = $(call pathsearch2,convbkmk,CONVBKMK,convbkmk)
+
+# $(latexpand)
 latexpand = $(call cache,latexpand_impl) $(LATEXPAND_OPT)
 
 latexpand_impl = $(call pathsearch2,latexpand,LATEXPAND,latexpand)
 
-# $(latepand)
+# $(latexdiff)
 latexdiff = $(call cache,latexdiff_impl) $(LATEXDIFF_OPT)
 
 latexdiff_impl = $(call pathsearch2,latexdiff,LATEXDIFF,latexdiff)
+
+# $(download) <OUTPUT-FILE> <URL>
+download = $(strip \
+	$(if $(_download_wget_found)$(_download_curl_found),,$(call _download_init)) \
+	$(if $(_download_wget_found), \
+		$(_download_wget_found) $(WGET_OPT) -O \
+	, \
+		$(if $(_download_curl_found), \
+			$(_download_curl_found) $(CURL_OPT) -L -o \
+		, \
+			$(call error_message,both wget and curl not found); exit 1; \
+		) \
+	) \
+)
+
+_download_init = $(strip \
+	$(if $(_download_wget_found),,$(eval _download_wget_found := $(call pathsearch,wget,true,$(WGET),wget))) \
+	$(if $(_download_wget_found)$(_download_curl_found),,$(eval _download_curl_found := $(call pathsearch,curl,true,$(CURL),curl))) \
+)
+
+_download_wget_found =
+_download_curl_found =
 
 # $(soffice)
 soffice = $(call cache,soffice_impl) $(SOFFICE_OPT)
@@ -538,6 +614,8 @@ mostlycleanfiles_impl = $(wildcard $(strip \
 	$(srctexfiles:.tex=.out) \
 	$(srctexfiles:.tex=.snm) \
 	$(srctexfiles:.tex=.spl) \
+	$(srctexfiles:.tex=.synctex) \
+	$(srctexfiles:.tex=.synctex.gz) \
 	$(srctexfiles:.tex=.toc) \
 	$(srctexfiles:.tex=.*.vrb) \
 	$(srctexfiles:.tex=.xdy) \
@@ -546,7 +624,11 @@ mostlycleanfiles_impl = $(wildcard $(strip \
 	$(srcltxfiles:.ltx=.log) \
 	*.bmc \
 	*.pbm \
+	*-convbkmk.ps \
 	*-eps-converted-to.pdf \
+	*.bb \
+	*.xbb \
+	*_tmp.??? \
 	*/*-eps-converted-to.pdf \
 	$(srctexfiles:.tex=-figure*.dpth) \
 	$(srctexfiles:.tex=-figure*.log) \
@@ -594,7 +676,7 @@ notification_message = \
 	$(call colorize, \
 		printf "\033$(CL_NOTICE)$1\033$(CL_NORMAL)\n" >&2 \
 	, \
-		echo "Error: $1" >&2 \
+		echo "$1" >&2 \
 	)
 
 # $(call warning_message,MESSAGE) prints a warning message.
@@ -602,7 +684,7 @@ warning_message = \
 	$(call colorize, \
 		printf "\033$(CL_WARN)Warning: $1\033$(CL_NORMAL)\n" >&2 \
 	, \
-		echo "Error: $1" >&2 \
+		echo "Warning: $1" >&2 \
 	)
 
 # $(call error_message,MESSAGE) prints an error message.
@@ -612,6 +694,9 @@ error_message = \
 	, \
 		echo "Error: $1" >&2 \
 	)
+
+# $(call set_title,TITLE) changes the window title. (Default: do nothing.)
+set_title = :
 
 # $(call exec,COMMAND) invokes the command with checking the exit status.
 # $(call exec,COMMAND,false) invokes the command but skips the check.
@@ -635,7 +720,7 @@ exec = \
 	)
 
 # $(check_failed)
-check_failed = $$failed && { [ -n "$dont_delete_on_failure" ] || rm -f $@; exit 1; }; :
+check_failed = $$failed && { [ -n "$$dont_delete_on_failure" ] || rm -f $@; exit 1; }; :
 
 # $(colorize_output) gives sed commands for colorful output.
 # Errors:
@@ -685,6 +770,25 @@ cmpver_fmt_ = \
 
 ##
 
+ifneq ($(subdirs),)
+
+# $(call make_for_each_subdir,TARGET) invokes Make for the given target
+# (if exists) in all subdirectories.
+make_for_each_subdir = \
+	for dir in $(subdirs); do \
+		if $(MAKE) -n -C $$dir $1 >/dev/null 2>&1; then \
+			$(MAKE) -C $$dir $1; \
+		fi; \
+	done
+
+else
+
+make_for_each_subdir = :
+
+endif
+
+##
+
 ifeq ($(DIFF),)
 
 all: $(target)
@@ -694,6 +798,10 @@ else
 all: $(diff_target)
 
 endif
+
+all-recursive:
+	@$(call make_for_each_subdir,all-recursive)
+	@$(MAKE) all
 
 help: export help_message1 = $(help_message)
 help:
@@ -711,46 +819,50 @@ dist: $(target_basename:=.tar.gz)
 
 fmt: $(target_basename:=.fmt)
 
-ifneq ($(subdirs),)
-
 $(target_basename:=.dvi) \
 $(target_basename:=.ps) \
 $(target_basename:=.eps) \
 $(target_basename:=.pdf): | prerequisite
 
-prerequisite:
-	@for dir in $(subdirs); do \
-		if $(MAKE) -n -C $$dir $(PREREQUISITE_SUBDIRS) >/dev/null 2>&1; then \
-			$(MAKE) -C $$dir $(PREREQUISITE_SUBDIRS); \
-		fi; \
-	done; :
-
-endif
+prerequisite: prerequisite_
+	@$(call make_for_each_subdir,$(PREREQUISITE_SUBDIRS))
 
 mostlyclean:
-	@for dir in $(subdirs); do \
-		if $(MAKE) -n -C $$dir mostlyclean >/dev/null 2>&1; then \
-			$(MAKE) -C $$dir mostlyclean; \
-		fi; \
-	done; :
+	@$(call make_for_each_subdir,mostlyclean)
 	@$(if $(mostlycleanfiles),$(call exec,rm -f $(mostlycleanfiles)))
 	@$(if $(wildcard $(DEPDIR) $(DIFFDIR)),$(call exec,rm -rf $(DEPDIR) $(DIFFDIR)))
 
 clean:
-	@for dir in $(subdirs); do \
-		if $(MAKE) -n -C $$dir clean >/dev/null 2>&1; then \
-			$(MAKE) -C $$dir clean; \
-		fi; \
-	done; :
+	@$(call make_for_each_subdir,clean)
 	@$(if $(cleanfiles),$(call exec,rm -f $(cleanfiles)))
 	@$(if $(wildcard $(DEPDIR) $(DIFFDIR)),$(call exec,rm -rf $(DEPDIR) $(DIFFDIR)))
 
-check:
-	@for dir in $(subdirs); do \
-		if $(MAKE) -n -C $$dir check >/dev/null 2>&1; then \
-			$(MAKE) -C $$dir check; \
-		fi; \
+lint:
+	@$(builtin_lints) \
+	for file in $(wildcard *.tex); do \
+		for lint in $(LINTS); do \
+			if [ -f "$$lint" ]; then \
+				$(call exec,./$$lint $$file); \
+			else \
+				$(call exec,$$lint $$file); \
+			fi; \
+		done; \
 	done
+
+builtin_lints =
+
+# Check common mistakes about spacing after periods.
+# XXX: --color=always is not POSIX. We may reflect $(make_colors).
+builtin_lints += \
+	check_periods() { \
+		if grep -n --color=always '[A-Z][A-Z][A-Z]*)\?\.' "$$1"; then \
+			$(call error_message,most likely wrong spacing after periods. You may need to insert \\@); \
+			exit 1; \
+		fi; \
+	};
+
+check:
+	@$(call make_for_each_subdir,check)
 	@for test in $(TESTS); do \
 		if [ -f "$$test" ]; then \
 			$(call exec,./$$test); \
@@ -762,56 +874,67 @@ check:
 # The "watch" mode. Try .log instead of .pdf/.dvi files, otherwise make would
 # continuously try to typeset for sources previously failed.
 watch:
-	@echo "Watching for $(srctexfiles:.tex=.$(default_target)). Press Ctrl+C to quit"
-	@while :; do \
-		if $(MAKE) -q -s $(srctexfiles:.tex=.log); then :; else \
-			time $(MAKE) -s $(srctexfiles:.tex=.log); \
+	@$(init_toolchain)
+	@if $(if $(srctexfiles:.tex=.$(default_target)),:,false); then \
+		echo "Watching for $(srctexfiles:.tex=.$(default_target)). Press Ctrl+C to quit"; \
+		$(call set_title,watching); \
+		if $(MAKE) -q -s $(srctexfiles:.tex=.$(default_target)); then :; else \
+			$(call set_title,running); \
+			if time $(MAKE) -s $(srctexfiles:.tex=.$(default_target)); then \
+				$(call set_title,watching); \
+			else \
+				$(call set_title,failed); \
+			fi; \
 		fi; \
-		sleep 1; \
-	done
+		while :; do \
+			sleep 1; \
+			if $(MAKE) -q -s $(srctexfiles:.tex=.log); then :; else \
+				$(call set_title,running); \
+				if time $(MAKE) -s $(srctexfiles:.tex=.log); then \
+					$(call set_title,watching); \
+				else \
+					$(call set_title,failed); \
+				fi; \
+			fi; \
+		done \
+	else \
+		echo "No files to watch"; \
+	fi
 
 # Upgrade files in the setup. (Be careful!)
+# Files to be upgraded must have a tag like
+#
+#   latest-raw-url: https://raw.githubusercontent.com/tueda/makefile4latex/master/Makefile
+#
 # When the current directory is a Git repository and doesn't have the .gitignore
-# file, this target downloads that of the Makefile4LaTeX repository. It also
-# tries to upgrade some other files on Gist.
+# file, this target downloads that of the Makefile4LaTeX repository.
 upgrade:
-	@if $(call have_url,Makefile,https://github.com/tueda/makefile4latex); then \
-		$(call upgrade,Makefile,https://raw.githubusercontent.com/tueda/makefile4latex/master/Makefile); \
-	fi
-	@if $(call have_url,.gitignore,https://github.com/tueda/makefile4latex) \
-			|| { [ -d .git ] && [ ! -f .gitignore ]; }; then \
+	@$(call make_for_each_subdir,upgrade)
+	@for file in * .*; do \
+		case "$$file" in \
+			*.swp|*.tmp|*~) \
+				continue \
+				;; \
+		esac; \
+		if [ -f "$$file" ] && [ ! -L "$$file" ]; then \
+			if grep -q 'latest-raw-url *: *.' "$$file" >/dev/null 2>&1; then \
+				url=$$(grep 'latest-raw-url *: *.' "$$file" | head -1 | sed 's/.*latest-raw-url *: *//' | sed 's/ .*//'); \
+				$(call upgrade,$$file,$$url); \
+			fi \
+		fi; \
+	done
+	@if [ -d .git ] && [ ! -f .gitignore ]; then \
 		$(call upgrade,.gitignore,https://raw.githubusercontent.com/tueda/makefile4latex/master/.gitignore); \
 	fi
-	@if $(call have_url,axodraw2e.sty,https://gist.github.com/tueda/5d8a7ff9181ef630160703606f449597); then \
-		$(call upgrade,axodraw2e.sty,https://gist.githubusercontent.com/tueda/5d8a7ff9181ef630160703606f449597/raw/axodraw2e.sty); \
-	fi
-	@if $(call have_url,beamer-setup.sty,https://gist.github.com/tueda/80320d5a756e4800b59e50d6da995765); then \
-		$(call upgrade,beamer-setup.sty,https://gist.githubusercontent.com/tueda/80320d5a756e4800b59e50d6da995765/raw/beamer-setup.sty); \
-	fi
-	@if $(call have_url,my-JHEP.bst,https://gist.github.com/tueda/515c813ad4dc42d8558a20aef94a83c9); then \
-		$(call upgrade,my-JHEP.bst,https://gist.githubusercontent.com/tueda/515c813ad4dc42d8558a20aef94a83c9/raw/my-JHEP.bst); \
-	fi
-	@if $(call have_url,JHEP.bst,https://gist.github.com/tueda/515c813ad4dc42d8558a20aef94a83c9); then \
-		$(call upgrade,JHEP.bst,https://gist.githubusercontent.com/tueda/515c813ad4dc42d8558a20aef94a83c9/raw/my-JHEP.bst); \
-	fi
-	@if $(call have_url,my-iopart-num.bst,https://gist.github.com/tueda/e256d86c9f340f3693419a4cd1311edb); then \
-		$(call upgrade,my-iopart-num.bst,https://gist.githubusercontent.com/tueda/e256d86c9f340f3693419a4cd1311edb/raw/my-iopart-num.bst); \
-	fi
-	@if $(call have_url,iopart-num.bst,https://gist.github.com/tueda/e256d86c9f340f3693419a4cd1311edb); then \
-		$(call upgrade,iopart-num.bst,https://gist.githubusercontent.com/tueda/e256d86c9f340f3693419a4cd1311edb/raw/my-iopart-num.bst); \
-	fi
-
-# $(call have_url,FILE,URL) checks if the URL is contained in the file.
-have_url = grep -q '$2' '$1' >/dev/null 2>&1
 
 # $(call upgrade,FILE,URL) tries to upgrade the given file.
 upgrade = \
-	wget '$2' -O '$1.tmp' && { \
-		if diff -q '$1' '$1.tmp' >/dev/null 2>&1; then \
+	$(download) "$1.tmp" "$2" && { \
+		if diff -q "$1" "$1.tmp" >/dev/null 2>&1; then \
 			$(call notification_message,$1 is up-to-date); \
-			rm -f '$1.tmp'; \
+			rm -f "$1.tmp"; \
 		else \
-			mv -v '$1.tmp' '$1'; \
+			mv -v "$1.tmp" "$1"; \
 			$(call notification_message,$1 is updated); \
 		fi; \
 		:; \
@@ -819,7 +942,7 @@ upgrade = \
 
 FORCE:
 
-.PHONY : all check clean dist dvi eps fmt help mostlyclean pdf ps prerequisite upgrade watch FORCE
+.PHONY : all all-recursive check clean dist dvi eps fmt help lint mostlyclean pdf ps prerequisite upgrade watch FORCE
 
 # $(call typeset,LATEX-COMMAND) tries to typeset the document.
 # $(call typeset,LATEX-COMMAND,false) doesn't delete the output file on failure.
@@ -1038,6 +1161,8 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 	@$(call switch,$(typeset_mode), \
 		dvips, \
 		$(call typeset,$(latex)), \
+		dvips_convbkmk, \
+		$(call typeset,$(latex)), \
 		dvipdf, \
 		$(call typeset,$(latex)), \
 		pdflatex, \
@@ -1049,10 +1174,12 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 	@$(call switch,$(typeset_mode), \
 		dvips, \
 		$(call typeset,$(latex)) && $(call exec,$(dvips) $*), \
+		dvips_convbkmk, \
+		$(call typeset,$(latex)) && $(call exec,$(dvips) $*) && $(call exec,$(convbkmk) $*.ps) && mv $*-convbkmk.ps, \
 		dvipdf, \
 		$(call typeset,$(latex)) && $(call exec,$(dvips) $*), \
 		pdflatex, \
-		$(call typeset,$(latex) $(PDFLATEX_DVI_OPT)), \
+		$(call typeset,$(latex) $(PDFLATEX_DVI_OPT)) && $(call exec,$(dvips) $*), \
 	)
 
 .tex.pdf:
@@ -1060,6 +1187,8 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 	@$(call switch,$(typeset_mode), \
 		dvips, \
 		$(call typeset,$(latex)) && $(call exec,$(dvips) $*) && $(call exec,$(ps2pdf) $*.ps $*.pdf), \
+		dvips_convbkmk, \
+		$(call typeset,$(latex)) && $(call exec,$(dvips) $*) && $(call exec,$(convbkmk) $*.ps) && mv $*-convbkmk.ps $*.ps && $(call exec,$(ps2pdf) $*.ps $*.pdf), \
 		dvipdf, \
 		$(call typeset,$(latex)) && $(call exec,$(dvipdf) $*), \
 		pdflatex, \
@@ -1075,6 +1204,8 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 		$(call switch,$(typeset_mode), \
 			dvips, \
 			$(call typeset,$(latex),false), \
+			dvips_convbkmk, \
+			$(call typeset,$(latex),false), \
 			dvipdf, \
 			$(call typeset,$(latex),false), \
 			pdflatex, \
@@ -1083,18 +1214,22 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 		ps, \
 		$(call switch,$(typeset_mode), \
 			dvips, \
-			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*), \
+			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*,false), \
+			dvips_convbkmk, \
+			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*,false) && $(call exec,$(convbkmk) $*.ps,false) && mv $*-convbkmk.ps, \
 			dvipdf, \
-			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*), \
+			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*,false), \
 			pdflatex, \
-			$(call typeset,$(latex) $(PDFLATEX_DVI_OPT),false), \
+			$(call typeset,$(latex) $(PDFLATEX_DVI_OPT),false) && $(call exec,$(dvips) $*,false), \
 		), \
 		pdf, \
 		$(call switch,$(typeset_mode), \
 			dvips, \
-			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*) && $(call exec,$(ps2pdf) $*.ps $*.pdf), \
+			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*,false) && $(call exec,$(ps2pdf) $*.ps $*.pdf,false), \
+			dvips_convbkmk, \
+			$(call typeset,$(latex),false) && $(call exec,$(dvips) $*,false) && $(call exec,$(convbkmk) $*.ps,false) && mv $*-convbkmk.ps $*.ps && $(call exec,$(ps2pdf) $*.ps $*.pdf,false), \
 			dvipdf, \
-			$(call typeset,$(latex),false) && $(call exec,$(dvipdf) $*), \
+			$(call typeset,$(latex),false) && $(call exec,$(dvipdf) $*,false), \
 			pdflatex, \
 			$(call typeset,$(latex),false), \
 		) \
@@ -1150,6 +1285,24 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 
 .odt.pdf:
 	@$(call exec,$(soffice) --headless --nologo --nofirststartwizard --convert-to pdf $<)
+
+.jpg.bb:
+	$(ebb) $<
+
+.png.bb:
+	$(ebb) $<
+
+.pdf.bb:
+	$(ebb) $<
+
+.jpg.xbb:
+	$(extractbb) $<
+
+.png.xbb:
+	$(extractbb) $<
+
+.pdf.xbb:
+	$(extractbb) $<
 
 # A distribution (for arXiv) needs to include
 # 1. The main tex file.
@@ -1223,7 +1376,7 @@ check_rerun = grep 'Rerun' $*.log | grep -v 'Package: rerunfilecheck\|rerunfilec
 		done; \
 	} >$(DEPDIR)/$@.d; \
 	cd $$tmpdir || exit 1; \
-	$(call exec,tar cfv - * | gzip -9 -n >$@,false); \
+	$(call exec,tar cfv - --exclude $@ * | gzip -9 -n >$@,false); \
 	cd .. || exit 1; \
 	$(check_failed); \
 	mv $$tmpdir/$@ $@
@@ -1284,6 +1437,8 @@ ifneq ($(DIFF),)
 		mkdir $$_tmpdir; \
 		(cd $$_tmpdir && tar xfz ../$(DIFFDIR)/$$_rev1/$$_git_prefix/$*.tar.gz); \
 		(cd $$_tmpdir && tar xfz ../$*.tar.gz); \
+		$(call latexdiff_copy_cache,$(DIFFDIR)/$$_rev1/$$_git_prefix,$$_tmpdir); \
+		$(call latexdiff_copy_cache,.,$$_tmpdir); \
 		cp $(DIFFDIR)/$$_rev1/$$_git_prefix/$*-expanded.tex $$_tmpdir/$*-expanded-old.tex; \
 		$(call expand_latex_source,$<,$$_tmpdir/$*-expanded-new.tex); \
 		$(call latexdiff_insubdir,$$_tmpdir,$<,$*-expanded-old.tex,$*-expanded-new.tex,$*-diff.tex,$*-diff.$(default_target),$(DIFF)..); \
@@ -1293,10 +1448,22 @@ ifneq ($(DIFF),)
 		mkdir $$_tmpdir; \
 		(cd $$_tmpdir && tar xfz ../$(DIFFDIR)/$$_rev1/$$_git_prefix/$*.tar.gz); \
 		(cd $$_tmpdir && tar xfz ../$(DIFFDIR)/$$_rev2/$$_git_prefix/$*.tar.gz); \
+		$(call latexdiff_copy_cache,$(DIFFDIR)/$$_rev1/$$_git_prefix,$$_tmpdir); \
+		$(call latexdiff_copy_cache,$(DIFFDIR)/$$_rev2/$$_git_prefix,$$_tmpdir); \
 		cp $(DIFFDIR)/$$_rev1/$$_git_prefix/$*-expanded.tex $$_tmpdir/$*-expanded-old.tex; \
 		cp $(DIFFDIR)/$$_rev2/$$_git_prefix/$*-expanded.tex $$_tmpdir/$*-expanded-new.tex; \
 		$(call latexdiff_insubdir,$$_tmpdir,$<,$*-expanded-old.tex,$*-expanded-new.tex,$*-diff.tex,$*-diff.$(default_target),$(DIFF)); \
 	fi
+
+# $(call latexdiff_copy_cache,SOURCE-DIRECTORY,DESTINATION-DIRECTORY) copies
+# cache files (i.e., eps-to-pdf) used in typesetting.
+latexdiff_copy_cache = \
+	for _f in $$(find "$2" -name '*.eps'); do \
+		_ff="$1/$$(basename "$$_f" .eps)-eps-converted-to.pdf"; \
+		if [ -f "$$_ff" ]; then \
+			cp "$$_ff" $$(dirname "$$_f"); \
+		fi; \
+	done
 
 # $(call expand_latexdiff_repo,REVISION)
 # Uses: $*, $$_git_root, $$_git_prefix
@@ -1319,17 +1486,25 @@ expand_latexdiff_repo = \
 	rm -f $(DIFFDIR)/$1/$$_git_prefix/$(Makefile); \
 	cp $(Makefile) $(DIFFDIR)/$1/$$_git_prefix/$(Makefile); \
 	$(MAKE) -C $(DIFFDIR)/$1/$$_git_prefix -f $(Makefile) $*.tar.gz || exit 1; \
+	case $1 in \
+		*HEAD*) \
+			rm -f $(DIFFDIR)/$1/$$_git_prefix/$*-expanded.tex; \
+			;; \
+	esac; \
 	(cd $(DIFFDIR)/$1/$$_git_prefix && $(call expand_latex_source,$*.tex,$*-expanded.tex))
 
 # $(call expand_latex_source,IN-TEX-FILE,OUT-TEX-FILE) expands a LaTeX source.
 # Optionally a .bbl file is also expanded if exists.
 expand_latex_source = { \
-	_tmp_latexexpand_fbody="$1"; \
-	_tmp_latexexpand_fbody=$${_tmp_latexexpand_fbody%.*}; \
-	if [ -f "$$_tmp_latexexpand_fbody.bbl" ]; then \
-		$(call exec,$(latexpand) --expand-bbl "$$_tmp_latexexpand_fbody.bbl" "$1" >"$2"); \
-	else \
-		$(call exec,$(latexpand) --expand-usepackage "$1" >"$2"); \
+	if [ -f "$2" ]; then :; else \
+		_tmp_latexexpand_fbody="$1"; \
+		_tmp_latexexpand_fbody=$${_tmp_latexexpand_fbody%.*}; \
+		if [ -f "$$_tmp_latexexpand_fbody.bbl" ]; then \
+			$(call exec,$(latexpand) --expand-bbl "$$_tmp_latexexpand_fbody.bbl" "$1" >"$2.tmp"); \
+		else \
+			$(call exec,$(latexpand) "$1" >"$2.tmp"); \
+		fi; \
+		mv "$2.tmp" "$2"; \
 	fi \
 }
 
@@ -1337,25 +1512,23 @@ expand_latex_source = { \
 # performs latexdiff and then make for the target-diff file.
 # When --math-markup=N is not given in LATEXDIFF_OPT, this code repeats
 # the process with decreasing --math-markup from 3 to 0 until it succeeds.
+# Similarly it also tries --allow-spaces if not given.
 latexdiff_insubdir = \
 	rm -f $1/$2; \
 	cp $(Makefile) $1/$(Makefile); \
-	[ -f .latex.mk ] && cp .latex.mk $1/ ;\
+	[ -f .latex.mk ] && cp .latex.mk $1/; \
 	$(if $(findstring --math-markup=,$(LATEXDIFF_OPT)), \
-		(cd $1 && $(call exec,$(latexdiff) $3 $4 >$5)) || exit 1; \
-		$(MAKE) -C $1 -f $(Makefile) $6 || exit 1; \
+		$(if $(findstring --allow-spaces,$(LATEXDIFF_OPT)), \
+			$(call latexdiff_insubdir_none,$1,$2,$3,$4,$5,$6,$7) \
+		, \
+			$(call latexdiff_insubdir_spaces,$1,$2,$3,$4,$5,$6,$7) \
+		) \
 	, \
-		(cd $1 && $(call exec,$(latexdiff) --math-markup=3 $3 $4 >$5)) || exit 1; \
-		if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
-			(cd $1 && $(call exec,$(latexdiff) --math-markup=2 $3 $4 >$5)) || exit 1; \
-			if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
-				(cd $1 && $(call exec,$(latexdiff) --math-markup=1 $3 $4 >$5)) || exit 1; \
-				if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
-					(cd $1 && $(call exec,$(latexdiff) --math-markup=0 $3 $4 >$5)) || exit 1; \
-					$(MAKE) -C $1 -f $(Makefile) || exit 1; \
-				fi; \
-			fi; \
-		fi; \
+		$(if $(findstring --allow-spaces,$(LATEXDIFF_OPT)), \
+			$(call latexdiff_insubdir_math,$1,$2,$3,$4,$5,$6,$7) \
+		, \
+			$(call latexdiff_insubdir_math_spaces,$1,$2,$3,$4,$5,$6,$7) \
+		) \
 	) \
 	mv $1/$6 .; \
 	if [ -f "$6" ]; then \
@@ -1364,8 +1537,61 @@ latexdiff_insubdir = \
 		exit 1; \
 	fi
 
+latexdiff_insubdir_none = \
+	(cd $1 && $(call exec,$(latexdiff) $3 $4 >$5)) || exit 1; \
+	$(MAKE) -C $1 -f $(Makefile) $6 || exit 1;
+
+latexdiff_insubdir_spaces = \
+	(cd $1 && $(call exec,$(latexdiff) $3 $4 >$5)) || exit 1; \
+	if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+		(cd $1 && $(call exec,$(latexdiff) --allow-spaces $3 $4 >$5)) || exit 1; \
+		$(MAKE) -C $1 -f $(Makefile) $6 || exit 1; \
+	fi;
+
+latexdiff_insubdir_math = \
+	(cd $1 && $(call exec,$(latexdiff) --math-markup=3 $3 $4 >$5)) || exit 1; \
+	if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+		(cd $1 && $(call exec,$(latexdiff) --math-markup=2 $3 $4 >$5)) || exit 1; \
+		if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+			(cd $1 && $(call exec,$(latexdiff) --math-markup=1 $3 $4 >$5)) || exit 1; \
+			if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+				(cd $1 && $(call exec,$(latexdiff) --math-markup=0 $3 $4 >$5)) || exit 1; \
+				$(MAKE) -C $1 -f $(Makefile) $6 || exit 1; \
+			fi; \
+		fi; \
+	fi;
+
+latexdiff_insubdir_math_spaces = \
+	(cd $1 && $(call exec,$(latexdiff) --math-markup=3 $3 $4 >$5)) || exit 1; \
+	if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+		(cd $1 && $(call exec,$(latexdiff) --math-markup=2 $3 $4 >$5)) || exit 1; \
+		if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+			(cd $1 && $(call exec,$(latexdiff) --math-markup=1 $3 $4 >$5)) || exit 1; \
+			if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+				(cd $1 && $(call exec,$(latexdiff) --math-markup=0 $3 $4 >$5)) || exit 1; \
+				if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+					(cd $1 && $(call exec,$(latexdiff) --math-markup=3 --allow-spaces $3 $4 >$5)) || exit 1; \
+					if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+						(cd $1 && $(call exec,$(latexdiff) --math-markup=2 --allow-spaces $3 $4 >$5)) || exit 1; \
+						if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+							(cd $1 && $(call exec,$(latexdiff) --math-markup=1 --allow-spaces $3 $4 >$5)) || exit 1; \
+							if $(MAKE) -C $1 -f $(Makefile) $6; then :; else \
+								(cd $1 && $(call exec,$(latexdiff) --math-markup=0 --allow-spaces $3 $4 >$5)) || exit 1; \
+								$(MAKE) -C $1 -f $(Makefile) $6 || exit 1; \
+							fi; \
+						fi; \
+					fi; \
+				fi; \
+			fi; \
+		fi; \
+	fi;
+
 endif
 
 -include $(DEPDIR)/*.d
 -include ~/.latex.mk
 -include .latex.mk
+
+prerequisite_: $(PREREQUISITE)
+
+.PHONY: prerequisite_

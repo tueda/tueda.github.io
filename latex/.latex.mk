@@ -1,1 +1,2 @@
 TOOLCHAIN = platex_dvipdfmx
+PREREQUISITE_SUBDIRS =

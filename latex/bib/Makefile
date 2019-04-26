@@ -1,9 +1,16 @@
 include ../Makefile
 
-all: papers.bbl proceedings.bbl thesis.bbl software-documents.bbl \
-	preprints.bbl intl-talks.bbl other-talks.bbl
+BBL_FILES = \
+	papers.bbl \
+	proceedings.bbl \
+	thesis.bbl \
+	preprints.bbl \
+	intl-talks.bbl \
+	other-talks.bbl \
 
-CLEANFILES += *.bbl
+all: $(BBL_FILES)
+
+CLEANFILES += $(BBL_FILES)
 
 %.bbl: ../../docs/bibtex/%.bib
 	@echo "Generating $@ ...";
