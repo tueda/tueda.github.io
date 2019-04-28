@@ -56,6 +56,10 @@
   for your machine.
   <small>[[Raw]](https://git.io/formset.py)</small>
 
+- [FrameApplet.java](https://gist.github.com/tueda/df27d1c55a74c396593002b1700a5aa9):
+  Applet working without browsers/appletviewer.
+  <small>[[Raw]](https://gist.githubusercontent.com/tueda/df27d1c55a74c396593002b1700a5aa9/raw/FrameApplet.java)</small>
+
 - [git-graph](https://gist.github.com/tueda/d411b7ddc4167c5bb209040b637d5e2d)
   shows pretty branch graphs.
   <small>[[Raw]](https://gist.githubusercontent.com/tueda/d411b7ddc4167c5bb209040b637d5e2d/raw/git-graph)</small>
