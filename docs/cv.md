@@ -28,22 +28,22 @@ in perturbative quantum field theories and their applications to phenomenology.
 
 April 2004 -- March 2007
 : [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
-  [Graduate School of Engineering](http://gakufu.eng.ynu.ac.jp/english/),
-  [Yokohama National University](http://www.ynu.ac.jp/english/)  
+  [Graduate School of Engineering](https://gakufu.eng.ynu.ac.jp/english/),
+  [Yokohama National University](https://www.ynu.ac.jp/english/)  
   Doctor of Engineering (March 2007)  
   Thesis: The virtual photon structure to the next-to-next-to-leading order in QCD  
   (adviser: Ken Sasaki)
 
 April 2002 -- March 2004
 : [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
-  [Graduate School of Engineering](http://gakufu.eng.ynu.ac.jp/english/),
-  [Yokohama National University](http://www.ynu.ac.jp/english/)  
+  [Graduate School of Engineering](https://gakufu.eng.ynu.ac.jp/english/),
+  [Yokohama National University](https://www.ynu.ac.jp/english/)  
   Master of Engineering (March 2004)
 
 April 1998 -- March 2002
 : [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
-  [Faculty of Engineering](http://www.eng.ynu.ac.jp/english/),
-  [Yokohama National University](http://www.ynu.ac.jp/english/)  
+  [Faculty of Engineering](https://www.eng.ynu.ac.jp/english/),
+  [Yokohama National University](https://www.ynu.ac.jp/english/)  
   Bachelor of Engineering (March 2002)
 
 ## Positions Held

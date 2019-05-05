@@ -1,6 +1,6 @@
 # List of Publications
 
-- [INSPIRE Search](http://inspirehep.net/search?p=find+ea+T.Ueda.1)
+- [INSPIRE Search](https://inspirehep.net/search?p=find+ea+T.Ueda.1)
 - [Google Scholar](https://scholar.google.com/citations?user=zrbJjwUAAAAJ)
 
 ## Papers in Refereed Journals
