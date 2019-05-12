@@ -3,6 +3,7 @@
 - [Forcer](https://github.com/benruijl/forcer):
   A [FORM](https://github.com/vermaseren/form) program for evaluating
   four-loop massless propatator-type Feynman integrals.
+  <small>[[DOI]](https://doi.org/10.5281/zenodo.1043943)</small>
 
 - [FORM](https://github.com/vermaseren/form):
   A system for formula manipulation of very big expressions.
@@ -107,6 +108,7 @@
   A [Python](https://www.python.org/) package for communicating with
   [FORM](https://github.com/vermaseren/form).
   <small>[[PyPI]](https://pypi.org/project/python-form/)</small>
+  <small>[[DOI]](https://doi.org/10.5281/zenodo.1044009)</small>
 
 - [qgraph.sh](https://gist.github.com/tueda/73ca3589793bba1b6e73):
   A script to run [QGRAF](http://cfif.ist.utl.pt/~paulo/qgraf.html)
