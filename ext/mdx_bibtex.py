@@ -381,9 +381,9 @@ class BibTeXPreprocessor(Preprocessor):
 
     def _make_it(self, text):
         if self._format == 'html':
-            return '*{0}*'.format(text.strip())
+            return ' *{0}* '.format(text.strip())
         elif self._format == 'latex':
-            return r'{{\itshape {0}}}'.format(text)
+            return r'{{\itshape {0}\/}}'.format(text)
 
     def _make_link(self, text, url):
         if self._format == 'html':
@@ -457,7 +457,7 @@ class BibTeXPreprocessor(Preprocessor):
         s = self._make_it(s)
 
         if 'volume' in entry:
-            s = '{0} {1} ({2}) {3}'.format(
+            s = '{0}{1} ({2}) {3}'.format(
                 s,
                 self._make_bf(entry['volume']),
                 entry['year'],
