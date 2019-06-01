@@ -8,6 +8,7 @@ nav:
   - Publications: publications.md
   - Talks: talks.md
   - Software: software.md
+  - Misc: misc.md
 
 theme:
   name: 'material'
