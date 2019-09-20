@@ -122,6 +122,10 @@
   A script for creating tarballs.
   <small>[[Raw]](https://gist.githubusercontent.com/tueda/7777291/raw/tarb)</small>
 
+- [tikz-external-hash.sty](https://gist.github.com/tueda/c9a9c073c5f656e7ce870faf2e836be8):
+  A patch to the TikZ externalization library to use a hash of contents of a picture as the cache file name.
+  <small>[[Raw]](https://gist.githubusercontent.com/tueda/c9a9c073c5f656e7ce870faf2e836be8/raw/tikz-external-hash.sty)</small>
+
 - [term.gnuplot](https://gist.github.com/tueda/9233f5d50c1479fe68aaa546aff97a0c):
   A [gnuplot](http://www.gnuplot.info/) framework for encapsulating terminal-dependence.
   <small>[[Raw]](https://gist.githubusercontent.com/tueda/9233f5d50c1479fe68aaa546aff97a0c/raw/term.gnuplot)</small>
