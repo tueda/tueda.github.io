@@ -116,6 +116,9 @@ class BibTeXPreprocessor(Preprocessor):
         lines.cancel_sep()
         lines.add(self._cv_inspire(entry))
         lines.add(self._cv_mathscinet(entry))
+        lines.add(self._cv_cinii(entry))
+        lines.add(self._cv_ndl(entry))
+        lines.add(self._cv_hdl(entry))
         lines.add(self._cv_github(entry))
         lines.add_break()
         lines.add(self._cv_proceedings_info(entry))
@@ -143,8 +146,14 @@ class BibTeXPreprocessor(Preprocessor):
         lines.add_sep()
         lines.add(self._get_field(entry, 'school'))
         lines.cancel_sep()
-        lines.add(self._cv_note(entry))
+        lines.add(self._cv_preprint(entry))
+        lines.add(self._cv_inspire(entry))
+        lines.add(self._cv_mathscinet(entry))
+        lines.add(self._cv_cinii(entry))
         lines.add(self._cv_ndl(entry))
+        lines.add(self._cv_hdl(entry))
+        lines.add(self._cv_github(entry))
+        lines.add(self._cv_note(entry))
 
         return lines
 
@@ -532,6 +541,13 @@ class BibTeXPreprocessor(Preprocessor):
             return self._make_button(
                 'GitHub',
                 'https://github.com/{0}'.format(entry['github'])
+            )
+
+    def _cv_hdl(self, entry):
+        if 'hdl' in entry:
+            return self._make_button(
+                'HDL',
+                'https://hdl.handle.net/{0}'.format(entry['hdl'])
             )
 
     def _cv_cinii(self, entry):

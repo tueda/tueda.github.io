@@ -15,6 +15,10 @@
 
 {!bibtex/thesis.bib!}
 
+## Articles in Bulletins
+
+{!bibtex/bulletins.bib!}
+
 ## Preprints
 
 {!bibtex/preprints.bib!}
