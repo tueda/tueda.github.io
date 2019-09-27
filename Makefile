@@ -10,6 +10,10 @@ serve:
 deploy:
 	PYTHONPATH=$$(pwd)/ext mkdocs gh-deploy --remote-branch master
 
+mostlyclean:
+	rm -rf */*.pyc
+	make -C latex mostlyclean
+
 clean:
 	rm -rf site */*.pyc
 	make -C latex clean
