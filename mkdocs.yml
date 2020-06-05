@@ -11,17 +11,15 @@ nav:
   - Misc: misc.md
 
 theme:
-  name: 'material'
+  name: material
   palette:
-    primary: 'indigo'
-    accent: 'indigo'
-  logo:
-    icon: 'home'
+    primary: indigo
+    accent: indigo
 
 extra:
   social:
-    - type: 'github'
-      link: 'https://github.com/tueda'
+    - icon: fontawesome/brands/github
+      link: https://github.com/tueda
 
 markdown_extensions:
   - markdown.extensions.attr_list
