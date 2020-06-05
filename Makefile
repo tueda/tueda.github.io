@@ -1,14 +1,18 @@
-# Prerequisites:
-#   pip install markdown-include mkdocs mkdocs-material bibtexparser
+# Requirements: python>=3.5, poetry>=1.0 and GNU make
+
+export PYTHONPATH=$(shell pwd)/ext
 
 build:
-	PYTHONPATH=$$(pwd)/ext mkdocs build
+	poetry run mkdocs build
+
+install:
+	poetry install
 
 serve:
-	PYTHONPATH=$$(pwd)/ext mkdocs serve
+	poetry run mkdocs serve
 
 deploy:
-	PYTHONPATH=$$(pwd)/ext mkdocs gh-deploy --remote-branch master
+	poetry run mkdocs gh-deploy --remote-branch master
 
 mostlyclean:
 	rm -rf */*.pyc
