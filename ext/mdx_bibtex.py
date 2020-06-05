@@ -508,6 +508,14 @@ class BibTeXPreprocessor(Preprocessor):
         return None
 
     def _cv_inspire(self, entry):
+        if 'recid' in entry:
+            return self._make_button(
+                'INSPIRE',
+                ('https://inspirehep.net/literature/{0}'.format(
+                    entry['recid']
+                ))
+            )
+
         if 'slaccitation' in entry:
             # This BibTex entry most likely is taken from INSPIRE-HEP.
             if 'eprint' in entry and 'archiveprefix' in entry:
