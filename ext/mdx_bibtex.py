@@ -791,6 +791,6 @@ if __name__ == '__main__':
     })
 
     for f in args.files:
-        lines = pp.run([l.decode('UTF-8').rstrip() for l in f.readlines()])
+        lines = pp.run([l.rstrip() for l in f.readlines()])
         for l in lines:
-            print(l.encode('UTF-8'))
+            print(l)

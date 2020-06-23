@@ -8,6 +8,9 @@ build:
 install:
 	poetry install
 
+latex:
+	poetry run make -C latex
+
 serve:
 	poetry run mkdocs serve
 
@@ -21,3 +24,5 @@ mostlyclean:
 clean:
 	rm -rf site */*.pyc
 	make -C latex clean
+
+.PHONY: latex
