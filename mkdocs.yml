@@ -20,6 +20,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/tueda
+    - icon: fontawesome/brands/orcid
+      link: https://orcid.org/0000-0001-9805-5832
 
 markdown_extensions:
   - markdown.extensions.attr_list
