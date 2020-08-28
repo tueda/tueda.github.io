@@ -1,11 +1,12 @@
 # Requirements: python>=3.5, poetry>=1.0 and GNU make
 
-export PYTHONPATH=$(shell pwd)/ext
+export PYTHONPATH=$(shell pwd)/python
 
 build:
 	poetry run mkdocs build
 
 install:
+	git submodule update --init
 	poetry install
 
 latex:

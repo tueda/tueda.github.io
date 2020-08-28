@@ -1,0 +1,3 @@
+[submodule "extern/academicons"]
+	path = extern/academicons
+	url = https://github.com/jpswalsh/academicons.git

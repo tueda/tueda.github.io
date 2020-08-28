@@ -12,6 +12,7 @@ nav:
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     primary: indigo
     accent: indigo
@@ -22,6 +23,10 @@ extra:
       link: https://github.com/tueda
     - icon: fontawesome/brands/orcid
       link: https://orcid.org/0000-0001-9805-5832
+    - icon: academicons/inspire
+      link: https://inspirehep.net/authors/1032372
+    - icon: academicons/google-scholar
+      link: https://scholar.google.com/citations?user=zrbJjwUAAAAJ
 
 markdown_extensions:
   - markdown.extensions.attr_list
@@ -31,6 +36,12 @@ markdown_extensions:
   - markdown.extensions.smarty
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
   - toc:
       permalink: true
   - mdx_bibtex
