@@ -1,12 +1,13 @@
 include ../Makefile
 
 BBL_FILES = \
-	papers.bbl \
-	proceedings.bbl \
-	thesis.bbl \
-	preprints.bbl \
+	bulletins.bbl \
 	intl-talks.bbl \
 	other-talks.bbl \
+	papers.bbl \
+	preprints.bbl \
+	proceedings.bbl \
+	thesis.bbl \
 
 all: $(BBL_FILES)
 
