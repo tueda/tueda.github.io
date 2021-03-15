@@ -13,7 +13,7 @@ Address
 : [3-3-1 Kichijoji-Kitamachi, Musashino-shi, Tokyo 180-8633, Japan](https://www.google.com/maps/search/3-3-1+Kichijoji-Kitamachi,+Musashino-shi,+Tokyo+180-8633,+Japan)
 
 Room
-: Bldg. 12, 5th floor, \#2501C
+: Bldg. 12, 4th floor, \#2415B
 
 E-mail
 : tueda - at - st.seikei.ac.jp
