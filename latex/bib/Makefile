@@ -20,7 +20,7 @@ CLEANFILES += $(BBL_FILES)
 		printf '\\interlinepenalty=10000\n'; \
 		printf '\\providecommand{\\ul}[1]{#1}\n'; \
 		printf '\\providecommand{\\href}[2]{#2}\n'; \
-		python ../../ext/mdx_bibtex.py "$<"; \
+		python ../../python/mdx_bibtex.py "$<"; \
 		printf '\\end{thebibliography}\n'; \
 	} \
 	| sed 's/T\.~Ueda/\\ul{T.~Ueda}/' \
