@@ -7,6 +7,7 @@ BBL_FILES = \
 	papers.bbl \
 	preprints.bbl \
 	proceedings.bbl \
+	seminars.bbl \
 	thesis.bbl \
 
 all: $(BBL_FILES)

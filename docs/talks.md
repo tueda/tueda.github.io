@@ -4,6 +4,10 @@
 
 {!bibtex/intl-talks.bib!}
 
-## Other Presentations and Seminars
+## Other Presentations in Scientific Meetings
 
 {!bibtex/other-talks.bib!}
+
+## Seminars
+
+{!bibtex/seminars.bib!}
