@@ -7,7 +7,7 @@ Position
 : Assistant professor
 
 Affiliation
-: Department of Materials and Life Science,  
+: Department of Science and Technology,  
   Faculty of Science and Technology,  
   [Seikei University](https://www.seikei.ac.jp/university/eng/)
 
@@ -28,7 +28,9 @@ in perturbative quantum field theories and their applications to phenomenology.
 
 April 2018 -- present
 : Assistant professor (fixed-term) (助教),  
-  Department of Materials and Life Science,
+  Department of Science and Technology
+  (Department of Materials and Life Science
+  before a reorganization in April 2022),  
   Faculty of Science and Technology,
   [Seikei University](https://www.seikei.ac.jp/university/eng/)
 

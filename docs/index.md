@@ -1,12 +1,11 @@
 # Takahiro Ueda (植田高寛) {: .profile}
 
 Affiliation
-: Department of Materials and Life Science,  
+: Department of Science and Technology,  
   Faculty of Science and Technology,  
   [Seikei University](https://www.seikei.ac.jp/university/eng/)  
   ([成蹊大学](https://www.seikei.ac.jp/university/)
-   [理工学部](https://www.seikei.ac.jp/university/rikou/)
-   [物質生命理工学科](https://www.seikei.ac.jp/university/rikou/department/bio/)
+   [理工学部理工学科](https://www.seikei.ac.jp/university/rikou/)
    [数理解析研究室](http://www.ml.seikei.ac.jp/SUURI/))
 
 Address
