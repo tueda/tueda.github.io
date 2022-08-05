@@ -478,10 +478,14 @@ class BibTeXPreprocessor(Preprocessor):
                 entry['year'],
                 entry['pages'],
             )
+        if 'npages' in entry and '-' not in entry['pages']:
+            s = '{0}, {1}pp.'.format(s, entry['npages'])
         s = self._ndashify(s)
         s = self._apostrophify(s)
         if 'doi' in entry:
             s = self._make_link(s, 'https://doi.org/' + entry['doi'])
+        elif 'url' in entry:
+            s = self._make_link(s, entry['url'])
         return s
 
     def _cv_preprint(self, entry):
