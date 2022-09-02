@@ -18,6 +18,10 @@ E-mail
 : tueda - at - st.seikei.ac.jp
 {: .ead}
 
+[![ORCID](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png) 0000-0001-9805-5832](https://orcid.org/0000-0001-9805-5832)
+&emsp;&emsp;
+[<img alt="researchmap" style="width: 130px; height: 40px; vertical-align: -15px;" src="https://researchmap.jp/outline/img/researchmap130.gif">](https://researchmap.jp/takahiro.ueda)
+
 ## Research interests
 
 My research area is theoretical particle physics.
