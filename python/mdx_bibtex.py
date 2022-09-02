@@ -450,10 +450,6 @@ class BibTeXPreprocessor(Preprocessor):
     def _cv_journal(self, entry):
         if 'journal' not in entry:
             return None
-        if 'year' not in entry:
-            return None
-        if 'pages' not in entry:
-            return None
 
         # Canonicalize spaces.
         s = entry['journal']
@@ -465,27 +461,38 @@ class BibTeXPreprocessor(Preprocessor):
 
         s = self._make_it(s)
 
-        if 'volume' in entry:
-            s = '{0}{1} ({2}) {3}'.format(
-                s,
-                self._make_bf(entry['volume']),
-                entry['year'],
-                entry['pages'],
-            )
+        if 'volume' in entry and entry['volume'] == 'to appear':
+            s = 'to appear in {0}'.format(s.rstrip())
         else:
-            s = '{0} ({1}) {2}'.format(
-                s,
-                entry['year'],
-                entry['pages'],
-            )
+            if 'year' not in entry:
+                return None
+            if 'pages' not in entry:
+                return None
+
+            if 'volume' in entry:
+                s = '{0}{1} ({2}) {3}'.format(
+                    s,
+                    self._make_bf(entry['volume']),
+                    entry['year'],
+                    entry['pages'],
+                )
+            else:
+                s = '{0} ({1}) {2}'.format(
+                    s,
+                    entry['year'],
+                    entry['pages'],
+                )
+
         if 'npages' in entry and '-' not in entry['pages']:
             s = '{0}, {1}pp.'.format(s, entry['npages'])
         s = self._ndashify(s)
         s = self._apostrophify(s)
+
         if 'doi' in entry:
             s = self._make_link(s, 'https://doi.org/' + entry['doi'])
         elif 'url' in entry:
             s = self._make_link(s, entry['url'])
+
         return s
 
     def _cv_preprint(self, entry):
@@ -608,17 +615,18 @@ class BibTeXPreprocessor(Preprocessor):
             return None
 
         # Example: Proceedings, Conference name: place, date
-        m = re.search('Proceedings,(.*):([^:]*)$', entry['booktitle'])
+        m = re.search('(Proceedings|Contribution to Proceedings),(.*):([^:]*)$', entry['booktitle'])
         if m:
-            confname = m.group(1).strip()
-            confplace = m.group(2).strip()  # also date
+            proceedings = m.group(1).strip()
+            confname = m.group(2).strip()
+            confplace = m.group(3).strip()  # also date
 
             if 'confurl' in entry:
                 confname = self._make_link(confname, entry['confurl'])
 
             confplace = self._canonicalize_date(confplace)
 
-            s = 'Proceedings for {0}, {1}'.format(confname, confplace)
+            s = '{0} of {1}, {2}'.format(proceedings, confname, confplace)
 
             if 'speaker' in entry:
                 s += ' (Speaker:&nbsp;{0})'.format(
