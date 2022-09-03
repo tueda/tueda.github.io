@@ -55,3 +55,9 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js
   - js/katex-start.js
+
+plugins:
+  - search: {}
+  - exclude:
+      glob:
+        - bibtex/*
