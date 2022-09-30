@@ -16,6 +16,17 @@ serve:
 	poetry run mkdocs serve
 
 deploy:
+	@if [ -z "$$GITHUB_ACTIONS" ]; then \
+		echo 'NOTE: "make deploy" was invoked outside GitHub Actions.'; \
+		while true; do \
+			read -p "Do you wish to continue to deploy? (y/n)" yn; \
+			case $$yn in \
+				[Yy]*) echo 'User chose to continue.'; break;; \
+				[Nn]*) echo 'User chose to discontinue.'; exit 1;; \
+				*) echo 'Please answer yes or no.';; \
+			esac; \
+		done; \
+	fi
 	poetry run mkdocs gh-deploy --remote-branch master
 
 mostlyclean:
