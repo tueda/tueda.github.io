@@ -4,18 +4,18 @@ Name
 : Takahiro Ueda
 
 Position
-: Assistant professor
+: Associate Professor
 
 Affiliation
-: Department of Science and Technology,  
-  Faculty of Science and Technology,  
-  [Seikei University](https://www.seikei.ac.jp/university/eng/)
+: Department of Mathematics,
+  Faculty of Medicine,
+  [Juntendo University](https://en.juntendo.ac.jp/)
 
 Address
-: [3-3-1 Kichijoji-Kitamachi, Musashino-shi, Tokyo 180-8633, Japan](https://www.google.com/maps/search/3-3-1+Kichijoji-Kitamachi,+Musashino-shi,+Tokyo+180-8633,+Japan)
+: [1-1 Hiraga-gakuendai, Inzai-shi, Chiba 270-1695, Japan](https://goo.gl/maps/A84g2txS4D4SVVk36)
 
 E-mail
-: tueda - at - st.seikei.ac.jp
+: t.ueda.od - at - juntendo.ac.jp
 {: .ead}
 
 [![ORCID](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png) 0000-0001-9805-5832](https://orcid.org/0000-0001-9805-5832)
@@ -30,7 +30,13 @@ in perturbative quantum field theories and their applications to phenomenology.
 
 ## Employment
 
-April 2018 -- present
+January 2023 -- present
+: Associate professor (准教授),  
+  Department of Mathematics,
+  Faculty of Medicine,
+  [Juntendo University](https://en.juntendo.ac.jp/)
+
+April 2018 -- December 2022
 : Assistant professor (fixed-term) (助教),  
   Department of Science and Technology
   (Department of Materials and Life Science

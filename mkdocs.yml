@@ -1,6 +1,6 @@
 site_name: 'Takahiro Ueda''s page'
 site_author: 'Takahiro Ueda'
-copyright: '&copy; 2022 Takahiro Ueda'
+copyright: '&copy; 2023 Takahiro Ueda'
 
 nav:
   - Home: index.md
@@ -47,13 +47,13 @@ markdown_extensions:
   - mdx_bibtex
 
 extra_css:
-  - https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css
+  - https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css
   - css/extra.css
 
 extra_javascript:
   - js/eads-start.js
-  - https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js
-  - https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js
   - js/katex-start.js
 
 plugins:

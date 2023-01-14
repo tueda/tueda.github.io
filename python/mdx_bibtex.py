@@ -333,7 +333,7 @@ class BibTeXPreprocessor(Preprocessor):
 
         # Example: April 1-May 5, 2000 -> 1 April-5 May 2000
         m = re.search(
-            r'(' + months + r')\s+(\d+)-(' + months + ')\s+(\d+)\s*,\s*(\d+)',
+            r'(' + months + r')\s+(\d+)-(' + months + r')\s+(\d+)\s*,\s*(\d+)',
             s)
         if m:
             s = '{0}{1} {2}-{3} {4} {5}{6}'.format(
@@ -765,9 +765,10 @@ class BibTeXExtension(Extension):
         }
         super(BibTeXExtension, self).__init__(**kwargs)
 
-    def extendMarkdown(self, md, md_globals):  # noqa: N802
+    def extendMarkdown(self, md):  # noqa: N802
         """Extend the Markdown's behaviour."""
-        md.preprocessors.add('bibtex', BibTeXPreprocessor(self.config), '_end')
+        md.preprocessors.register(BibTeXPreprocessor(self.config), 'bibtex', 10)
+
 
 
 def makeExtension(**kwargs):  # noqa: N802
