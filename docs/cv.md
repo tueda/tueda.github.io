@@ -25,7 +25,7 @@ E-mail
 ## Research interests
 
 My research area is theoretical particle physics.
-Especially, I am interested in higher-order radiative corrections
+In particular, I am interested in higher-order radiative corrections
 in perturbative quantum field theories and their applications to phenomenology.
 
 ## Employment

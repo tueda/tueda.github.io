@@ -25,8 +25,12 @@ extra:
       link: https://orcid.org/0000-0001-9805-5832
     - icon: academicons/inspire
       link: https://inspirehep.net/authors/1032372
+    # - icon: academicons/arxiv
+    #   link: https://arxiv.org/a/ueda_t_1
     - icon: academicons/google-scholar
       link: https://scholar.google.com/citations?user=zrbJjwUAAAAJ
+    # - icon: academicons/researchgate
+    #   link: https://www.researchgate.net/profile/Takahiro-Ueda-2
 
 markdown_extensions:
   - markdown.extensions.attr_list
