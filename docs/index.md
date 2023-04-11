@@ -5,9 +5,8 @@ Affiliation
   Faculty of Medicine,  
   [Juntendo University](https://en.juntendo.ac.jp/)  
   ([順天堂大学](https://www.juntendo.ac.jp/)
-   [医学部](https://med.juntendo.ac.jp/)
-   [一般教育研究室](https://med.juntendo.ac.jp/research/course/general/)
-   [（数学）](https://med.juntendo.ac.jp/research/course/general/mathematics.html))
+   [医学部](https://www.juntendo.ac.jp/academics/faculty/med/)
+   [一般教育研究室（数学）](https://www.juntendo.ac.jp/academics/graduate/med/research/labo/mathematics.html))
 
 Address
 : [1-1 Hiraga-gakuendai, Inzai-shi, Chiba 270-1695, Japan](https://goo.gl/maps/A84g2txS4D4SVVk36)
