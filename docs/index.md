@@ -12,7 +12,7 @@ Address
 : [1-1 Hiraga-gakuendai, Inzai-shi, Chiba 270-1695, Japan](https://goo.gl/maps/A84g2txS4D4SVVk36)
 
 Room
-: Bldg. 1, 3rd floor, \#1305
+: Bldg. 1, 3rd floor, \#1317
 
 E-mail
 : t.ueda.od - at - juntendo.ac.jp
