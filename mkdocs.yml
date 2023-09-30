@@ -29,6 +29,12 @@ extra:
     #   link: https://arxiv.org/a/ueda_t_1
     - icon: academicons/google-scholar
       link: https://scholar.google.com/citations?user=zrbJjwUAAAAJ
+    - icon: academicons/semantic-scholar
+      link: https://www.semanticscholar.org/author/Takahiro-Ueda/102354383
+    # - icon: academicons/stackoverflow
+    #   link: https://stackoverflow.com/users/9105334/tueda
+    # I do not recommend this site because the stats are wrong;
+    # they never accept my authorship claims.
     # - icon: academicons/researchgate
     #   link: https://www.researchgate.net/profile/Takahiro-Ueda-2
 
