@@ -1,4 +1,4 @@
-# Requirements: python>=3.5, poetry>=1.0 and GNU make
+# Requirements: python>=3.7, poetry>=1.7 and GNU make
 
 export PYTHONPATH=$(shell pwd)/python
 
@@ -7,7 +7,7 @@ build:
 
 install:
 	git submodule update --init
-	poetry install
+	poetry install --no-root
 
 latex:
 	poetry run make -C latex
