@@ -1,6 +1,6 @@
 site_name: 'Takahiro Ueda''s page'
 site_author: 'Takahiro Ueda'
-copyright: '&copy; 2024 Takahiro Ueda'
+copyright: '&copy; 2025 Takahiro Ueda'
 
 nav:
   - Home: index.md
@@ -35,6 +35,10 @@ extra:
       link: https://www.semanticscholar.org/author/Takahiro-Ueda/102354383
     # - icon: academicons/stackoverflow
     #   link: https://stackoverflow.com/users/9105334/tueda
+    # - icon: fontawesome/brands/kaggle
+    #   link: https://www.kaggle.com/tueda80
+    # - icon: simple/codingame
+    #   link: https://www.codingame.com/profile/316d93d02180ce35c3224b754224981a0026574
 
 markdown_extensions:
   - markdown.extensions.attr_list
