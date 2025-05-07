@@ -21,6 +21,10 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/tueda
+    # - icon: fontawesome/brands/gitlab
+    #   link: https://gitlab.com/tueda
+    # - icon: fontawesome/brands/bitbucket
+    #   link: https://bitbucket.org/tueda80
     - icon: fontawesome/brands/orcid
       link: https://orcid.org/0000-0001-9805-5832
     - icon: academicons/inspire
@@ -35,6 +39,8 @@ extra:
       link: https://www.semanticscholar.org/author/Takahiro-Ueda/102354383
     # - icon: academicons/stackoverflow
     #   link: https://stackoverflow.com/users/9105334/tueda
+    # - icon: simple/qiita
+    #   link: https://qiita.com/tueda
     # - icon: fontawesome/brands/kaggle
     #   link: https://www.kaggle.com/tueda80
     # - icon: simple/codingame
