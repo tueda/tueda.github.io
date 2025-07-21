@@ -609,6 +609,11 @@ class BibTeXPreprocessor(Preprocessor):
                 'Video',
                 'https://www.youtube.com/watch?v={0}'.format(entry['youtube'])
             )
+        if 'bilibili' in entry:
+            return self._make_button(
+                'Video',
+                'https://www.bilibili.com/video/{0}/'.format(entry['bilibili'])
+            )
 
     def _cv_proceedings_info(self, entry):
         if 'booktitle' not in entry:
