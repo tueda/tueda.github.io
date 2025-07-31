@@ -7,7 +7,7 @@ Position
 : Associate Professor
 
 Affiliation
-: Department of Mathematics,
+: General Education (Mathematics),
   Faculty of Medicine,
   [Juntendo University](https://en.juntendo.ac.jp/)
 
@@ -32,7 +32,7 @@ in perturbative quantum field theories and their applications to phenomenology.
 
 January 2023 -- present
 : Associate professor (准教授),  
-  Department of Mathematics,
+  General Education (Mathematics),
   Faculty of Medicine,
   [Juntendo University](https://en.juntendo.ac.jp/)
 

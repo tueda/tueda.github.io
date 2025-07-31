@@ -1,7 +1,7 @@
 # Takahiro Ueda (植田高寛) {: .profile}
 
 Affiliation
-: Department of Mathematics,
+: General Education (Mathematics),
   Faculty of Medicine,  
   [Juntendo University](https://en.juntendo.ac.jp/)  
   ([順天堂大学](https://www.juntendo.ac.jp/)
