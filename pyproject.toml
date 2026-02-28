@@ -1,15 +1,11 @@
-[tool.poetry]
-package-mode = false
-
-[tool.poetry.dependencies]
-python = "^3.11"
-
-bibtexparser = "^1.4.3"
-markdown-include = "^0.8.1"
-mkdocs = "^1.6.1"
-mkdocs-exclude = "^1.0.2"
-mkdocs-material = "^9.5.50" # theme should be consistent with "overrides"
-
-[build-system]
-requires = ["poetry-core>=1.8.0"]
-build-backend = "poetry.core.masonry.api"
+[project]
+name = "docs_on_github"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "bibtexparser>=1.4.3",
+  "markdown-include>=0.8.1",
+  "mkdocs>=1.6.1",
+  "mkdocs-exclude>=1.0.2",
+  "mkdocs-material>=9.5.50",  # theme should be consistent with "overrides"
+]

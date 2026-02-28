@@ -1,19 +1,19 @@
-# Requirements: python>=3.11, poetry>=2.0 and GNU make
+# Requirements: uv>=0.9 and GNU make>=3.81
 
-export PYTHONPATH=$(shell pwd)/python
+export PYTHONPATH := $(CURDIR)/python
 
 build:
-	poetry run mkdocs build --strict
+	uv run mkdocs build --strict
 
 install:
 	git submodule update --init
-	poetry install --no-root --no-interaction
+	uv sync
 
 latex:
-	poetry run make -C latex
+	uv run make -C latex
 
 serve:
-	poetry run mkdocs serve
+	uv run mkdocs serve
 
 mostlyclean:
 	rm -rf */*.pyc
@@ -23,4 +23,4 @@ clean:
 	rm -rf site */*.pyc
 	make -C latex clean
 
-.PHONY: latex
+.PHONY: build install latex serve mostlyclean clean
