@@ -56,32 +56,36 @@ April 2011 - September 2014
 
 April 2009 - March 2011
 : Postdoc (研究員),  
-  [Graduate School of Pure and Applied Sciences](http://www.pas.tsukuba.ac.jp/english/),
-  [University of Tsukuba](http://www.tsukuba.ac.jp/en/)
+  [Graduate School of Pure and Applied Sciences](https://grad.pas.tsukuba.ac.jp/?lang=en),
+  [University of Tsukuba](https://www.tsukuba.ac.jp/en/)
 
 April 2007 - March 2009
 : Postdoc (博士研究員),  
-  [Computing Research Center](http://research.kek.jp/group/crc/index-e.html),
+  [Computing Research Center](https://research.kek.jp/group/crc/index-e.html),
   [High Energy Accelerator Research Organization (KEK)](https://www.kek.jp/en/)
 
 ## Education
 
 April 2004 -- March 2007
-: [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
-  [Graduate School of Engineering](https://gakufu.eng.ynu.ac.jp/english/),
+: [Department of Physics](https://phys.ynu.ac.jp/eng/),
+  [Graduate School of Engineering](https://www.fse.ynu.ac.jp/english/),
   [Yokohama National University](https://www.ynu.ac.jp/english/)  
   Doctor of Engineering (March 2007)  
   Thesis: The virtual photon structure to the next-to-next-to-leading order in QCD  
   (adviser: Ken Sasaki)
 
 April 2002 -- March 2004
-: [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
-  [Graduate School of Engineering](https://gakufu.eng.ynu.ac.jp/english/),
+: [Department of Physics](https://phys.ynu.ac.jp/eng/),
+  [Graduate School of Engineering](https://www.fse.ynu.ac.jp/english/),
   [Yokohama National University](https://www.ynu.ac.jp/english/)  
   Master of Engineering (March 2004)
 
 April 1998 -- March 2002
-: [Department of Physics](http://www.phys.ynu.ac.jp/eng/),
-  College of Engineering,
+: [Department of Physics](https://phys.ynu.ac.jp/eng/),
+  [College of Engineering](https://www.es.ynu.ac.jp/english/),
   [Yokohama National University](https://www.ynu.ac.jp/english/)  
   Bachelor of Engineering (March 2002)
+
+<!--
+Note: The College / Graduate School of Engineering at Yokohama National University is now the College / Graduate School of Engineering Science.
+-->
